@@ -2,6 +2,7 @@ import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_usecase.dart';
 import 'package:showvis/features/shows_catalog/presentation/shows_catalog_view_model.dart';
+import 'package:showvis/router.dart';
 
 class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
     ShowsCatalogEntity, ShowsCatalogViewModel> {
@@ -10,9 +11,30 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
       : super(builder: builder, provider: showsCatalogUseCase);
 
   @override
+  void onLayoutReady(context, useCase) {
+    useCase.fetch();
+  }
+
+  @override
+  void onUpdate(context, entity) {
+    if (entity.state == EntityState.networkError) {}
+  }
+
+  @override
   ShowsCatalogViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    return ShowsCatalogViewModel(
-        fetchShows: useCase.fetch, shows: entity.shows);
+    if (entity.state == EntityState.initial) {
+      return const ShowsCatalogViewModel();
+    }
+    if (entity.state == EntityState.loading) {
+      return const ShowsCatalogLoadingViewModel();
+    } else if (entity.state == EntityState.networkError) {
+      return ShowsCatalogNetworkFailureViewModel(retry: useCase.fetch);
+    }
+    return ShowsCatalogSuccessViewModel(
+        shows: entity.shows,
+        openDetails: (id) {
+          router.push('/details/$id');
+        });
   }
 }
