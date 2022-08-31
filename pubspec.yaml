@@ -12,6 +12,10 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   riverpod: ^1.0.3
+  http_client: ^1.5.1
+  get_it: ^7.2.0
+  equatable: ^2.0.5
+  flutter_riverpod: ^1.0.4
 
 dev_dependencies:
   flutter_test:
