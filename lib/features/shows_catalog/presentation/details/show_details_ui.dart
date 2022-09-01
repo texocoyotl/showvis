@@ -13,12 +13,6 @@ class ShowDetailsUI extends UI<ShowDetailsViewModel> {
 
   @override
   Widget build(BuildContext context, ShowDetailsViewModel viewModel) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text(viewModel.show.name),
-    //   ),
-    //   body: _body(context, viewModel),
-    // );
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -39,22 +33,42 @@ class ShowDetailsUI extends UI<ShowDetailsViewModel> {
                 height: 20,
               ),
               ListTile(
-                title: const Text('Genres:'),
-                subtitle: Text(viewModel.genres),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Genres:'),
+                    Flexible(
+                      child: Text(
+                        viewModel.genres,
+                        textAlign: TextAlign.end,
+                      ),
+                    )
+                  ],
+                ),
               ),
               ListTile(
-                title: const Text('Premiered:'),
-                subtitle: Text(viewModel.premiered),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Premiered:'),
+                    Text(viewModel.premiered)
+                  ],
+                ),
               ),
               ListTile(
-                title: const Text('Ended:'),
-                subtitle: Text(viewModel.ended),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [const Text('Ended:'), Text(viewModel.ended)],
+                ),
               ),
               ListTile(
-                title: const Text('Schedule:'),
-                subtitle: Text(
-                    '${viewModel.daysSchedule} at ${viewModel.timeSchedule}'),
-              ),
+                  title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Schedule:'),
+                  Text('${viewModel.daysSchedule} at ${viewModel.timeSchedule}')
+                ],
+              )),
             ]),
           ),
         ],
