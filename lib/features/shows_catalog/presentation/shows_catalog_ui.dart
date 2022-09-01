@@ -55,7 +55,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
             .toList(),
       );
 
-  Widget _showRow(ShowSummary show, ValueChanged<int> openDetails) => Card(
+  Widget _showRow(Show show, ValueChanged<int> openDetails) => Card(
         child: ListTile(
           title: Text(show.name),
           onTap: () => openDetails(show.id),

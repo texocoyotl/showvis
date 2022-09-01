@@ -15,10 +15,10 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
     useCase.fetch();
   }
 
-  @override
-  void onUpdate(context, entity) {
-    if (entity.state == EntityState.networkError) {}
-  }
+  // @override
+  // void onUpdate(context, entity) {
+  //   if (entity.state == EntityState.networkError) {}
+  // }
 
   @override
   ShowsCatalogViewModel createViewModel(
@@ -32,7 +32,7 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
       return ShowsCatalogNetworkFailureViewModel(retry: useCase.fetch);
     }
     return ShowsCatalogSuccessViewModel(
-        shows: entity.shows,
+        shows: entity.shows.values.toList(),
         openDetails: (id) {
           router.push('/details/$id');
         });

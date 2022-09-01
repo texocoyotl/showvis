@@ -1,0 +1,57 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class AppBarWidget extends StatelessWidget {
+  // 1
+  final String text;
+  final String imagePath;
+  final bool centerTitle;
+  final Widget ratingsIcon;
+
+  const AppBarWidget({
+    super.key,
+    required this.text,
+    required this.imagePath,
+    required this.ratingsIcon,
+    this.centerTitle = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      title: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      centerTitle: centerTitle,
+      expandedHeight: 600, //TODO Make it relative to screen size
+      pinned: true,
+      elevation: 0,
+      actions: [
+        ratingsIcon,
+      ],
+      flexibleSpace: FlexibleSpaceBar(
+        background: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 76.0, bottom: 8),
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  const CupertinoActivityIndicator(
+                radius: 50,
+                //value: downloadProgress.progress,
+                color: Colors.black87,
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

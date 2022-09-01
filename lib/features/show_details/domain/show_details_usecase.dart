@@ -15,6 +15,12 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
 
     if (res is JsonFailureResponse) {
       entity = entity.merge(state: EntityState.networkError);
+
+      // Once an state is published, a second update is triggered to clean error states
+      // Future.delayed(Duration(milliseconds: 100), () async {
+      //   entity = entity.merge(state: EntityState.initial);
+      // });
+
       return;
     }
 

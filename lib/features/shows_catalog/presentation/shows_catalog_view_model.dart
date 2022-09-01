@@ -22,7 +22,7 @@ class ShowsCatalogSuccessViewModel extends ShowsCatalogViewModel {
   const ShowsCatalogSuccessViewModel(
       {required this.shows, required this.openDetails});
 
-  final List<ShowSummary> shows;
+  final List<Show> shows;
   final ValueChanged<int> openDetails;
 
   @override

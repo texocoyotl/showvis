@@ -25,8 +25,16 @@ class MyApp extends StatelessWidget {
       routeInformationProvider: router.routeInformationProvider,
       routeInformationParser: router.routeInformationParser,
       routerDelegate: router.routerDelegate,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
+      theme: ThemeData.light().copyWith(
+        colorScheme: const ColorScheme.light().copyWith(
+          primary: Colors.deepPurple,
+        ),
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyLarge: ThemeData.light().textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1.5,
+                  ),
+            ),
       ),
     );
   }
