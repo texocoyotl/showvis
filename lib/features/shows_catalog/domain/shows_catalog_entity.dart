@@ -116,7 +116,7 @@ class Episode extends Equatable {
         season: json['season'],
         number: json['number'],
         summary: parse(json['summary']).documentElement!.text,
-        imageUrl: json['image']['medium'] ?? '',
+        imageUrl: json['image']['original'] ?? '',
         airDate: DateTime.parse(
             '${json['airdate'] ?? '2099-01-01'} ${json['airtime'] ?? '00:00'}'),
       );

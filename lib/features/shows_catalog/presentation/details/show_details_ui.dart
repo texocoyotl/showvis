@@ -7,6 +7,7 @@ import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_presenter.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_view_model.dart';
+import 'package:showvis/router.dart';
 
 class ShowDetailsUI extends UI<ShowDetailsViewModel> {
   ShowDetailsUI({super.key, required this.id});
@@ -63,69 +64,19 @@ class ShowInfoWidget extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyLarge,
           )),
       divider,
-      ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Genres:', style: Theme.of(context).textTheme.bodyLarge),
-            Flexible(
-              child: Text(viewModel.genres,
-                  textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.bodyMedium),
-            )
-          ],
-        ),
-      ),
+      InfoRow(label: 'Genres:', value: viewModel.genres),
       divider,
-      ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Premiered:', style: Theme.of(context).textTheme.bodyLarge),
-            Text(viewModel.premiered)
-          ],
-        ),
-      ),
+      InfoRow(label: 'Premiered:', value: viewModel.premiered),
       divider,
-      ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Ended:', style: Theme.of(context).textTheme.bodyLarge),
-            Text(viewModel.ended),
-          ],
-        ),
-      ),
+      InfoRow(label: 'Ended:', value: viewModel.ended),
       divider,
-      ListTile(
-          title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Schedule:', style: Theme.of(context).textTheme.bodyLarge),
-          Text('${viewModel.daysSchedule} at ${viewModel.timeSchedule}'),
-        ],
-      )),
+      InfoRow(
+          label: 'Schedule:',
+          value: '${viewModel.daysSchedule} at ${viewModel.timeSchedule}'),
       divider,
       const SizedBox(
         height: 24,
       ),
-      // ExpansionTile(
-      //   title: const Text('Episodes'),
-      //   children: viewModel.episodes.state == CollectionState.initial ||
-      //           viewModel.episodes.state == CollectionState.loading
-      //       ? [
-      //           const Center(
-      //             child: CupertinoActivityIndicator(
-      //               radius: 24,
-      //               color: Colors.black87,
-      //             ),
-      //           )
-      //         ]
-      //       : [
-      //           for (Episode episode in viewModel.episodes.map.values)
-      //             Text(episode.name)
-      //         ],
-      // ),
     ]);
   }
 }
@@ -172,23 +123,52 @@ class EpisodesWidget extends StatelessWidget {
                 leading: SizedBox(
                     height: 50,
                     width: 50,
-                    child: CachedNetworkImage(
-                      imageUrl: episode.imageUrl,
-                      fit: BoxFit.cover,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              const CupertinoActivityIndicator(
-                        radius: 16,
-                        //value: downloadProgress.progress,
-                        color: Colors.black87,
+                    child: Hero(
+                      tag: episode.imageUrl,
+                      child: CachedNetworkImage(
+                        imageUrl: episode.imageUrl,
+                        fit: BoxFit.cover,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) =>
+                                const CupertinoActivityIndicator(
+                          radius: 16,
+                          //value: downloadProgress.progress,
+                          color: Colors.black87,
+                        ),
                       ),
                     )),
                 title: Text('${episode.number} - ${episode.name}'),
-                subtitle: Text(episode.airDate.day.toString()),
+                onTap: () {
+                  router.push('/episode/${episode.season}/${episode.number}');
+                },
               )
           ],
         );
       },
+    );
+  }
+}
+
+class InfoRow extends StatelessWidget {
+  const InfoRow({super.key, required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.bodyLarge),
+          Flexible(
+            child: Text(value,
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.bodyMedium),
+          )
+        ],
+      ),
     );
   }
 }
