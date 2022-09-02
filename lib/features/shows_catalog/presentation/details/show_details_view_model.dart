@@ -1,17 +1,22 @@
+import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
+import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 
 class ShowDetailsViewModel extends ViewModel {
-  const ShowDetailsViewModel(
-      {required this.name,
-      required this.largeImageUri,
-      required this.genres,
-      required this.premiered,
-      required this.ended,
-      required this.timeSchedule,
-      required this.daysSchedule,
-      required this.summary,
-      required this.rating});
+  const ShowDetailsViewModel({
+    required this.name,
+    required this.largeImageUri,
+    required this.genres,
+    required this.premiered,
+    required this.ended,
+    required this.timeSchedule,
+    required this.daysSchedule,
+    required this.summary,
+    required this.rating,
+    required this.episodes,
+    required this.onTabChange,
+  });
 
   final String name;
   final String largeImageUri;
@@ -22,6 +27,10 @@ class ShowDetailsViewModel extends ViewModel {
   final String daysSchedule;
   final String summary;
   final String rating;
+
+  final StatefulMap episodes;
+
+  final ValueChanged<int> onTabChange;
 
   @override
   List<Object?> get props => [
@@ -34,5 +43,6 @@ class ShowDetailsViewModel extends ViewModel {
         daysSchedule,
         summary,
         rating,
+        episodes,
       ];
 }

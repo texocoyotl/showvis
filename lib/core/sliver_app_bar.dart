@@ -8,6 +8,7 @@ class AppBarWidget extends StatelessWidget {
   final String imagePath;
   final bool centerTitle;
   final Widget ratingsIcon;
+  final Function(int) onTabChange;
 
   const AppBarWidget({
     super.key,
@@ -15,6 +16,7 @@ class AppBarWidget extends StatelessWidget {
     required this.imagePath,
     required this.ratingsIcon,
     this.centerTitle = false,
+    required this.onTabChange,
   });
 
   @override
@@ -23,7 +25,7 @@ class AppBarWidget extends StatelessWidget {
       title: Text(
         text,
         style: const TextStyle(
-          fontSize: 30,
+          //fontSize: 30,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -34,11 +36,25 @@ class AppBarWidget extends StatelessWidget {
       actions: [
         ratingsIcon,
       ],
+      bottom: TabBar(
+        //isScrollable: true,
+        labelPadding: const EdgeInsets.all(8),
+        onTap: onTabChange,
+        tabs: const [
+          Tab(
+            height: 36,
+            child: Text('About'),
+          ),
+          Tab(
+            child: Text('Episodes'),
+          ),
+        ],
+      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: Padding(
-            padding: const EdgeInsets.only(top: 76.0, bottom: 8),
+            padding: const EdgeInsets.only(top: 76.0, bottom: 48),
             child: CachedNetworkImage(
               imageUrl: imagePath,
               progressIndicatorBuilder: (context, url, downloadProgress) =>

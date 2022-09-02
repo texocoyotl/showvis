@@ -15,12 +15,17 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
   final int id;
 
   @override
+  void onLayoutReady(context, useCase) {
+    useCase.clearEpisodes();
+  }
+
+  @override
   ShowDetailsViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
     // TODO It might be possible to fail to match an id with its data in the catalog,
     // so there should be a failure model to cover that edge case
-
     final show = entity.shows[id]!;
+
     return ShowDetailsViewModel(
       name: show.name,
       largeImageUri: show.largeImageUri,
@@ -31,10 +36,14 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
       ended: show.ended.isAfter(DateTime.now())
           ? 'Currently airing'
           : '${DateFormat.MMM().format(show.ended)} ${DateFormat.y().format(show.ended)}',
-      timeSchedule: DateFormat.Hm().format(show.timeSchedule),
+      timeSchedule: show.timeSchedule,
       daysSchedule: show.daysSchedule.join(', '),
       summary: show.summary,
       rating: show.rating.toString(),
+      episodes: entity.episodes,
+      onTabChange: (index) {
+        if (index == 1) useCase.fetchEpisodes(id);
+      },
     );
   }
 }

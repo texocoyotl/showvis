@@ -4,8 +4,7 @@ import 'package:http_client/console.dart';
 
 abstract class HttpClient {
   void dispose();
-  Future<JsonResponse> query(
-      {String method = 'GET', required String path, required Function onError});
+  Future<JsonResponse> query({String method = 'GET', required String path});
 }
 
 class HttpClientImpl implements HttpClient {
@@ -24,7 +23,6 @@ class HttpClientImpl implements HttpClient {
   Future<JsonResponse> query({
     String method = 'GET',
     required String path,
-    required Function onError,
   }) async {
     try {
       final rs = await _client.send(Request(method, '$baseUrl$path'));

@@ -1,22 +1,32 @@
 import 'package:equatable/equatable.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:html/parser.dart';
+import 'package:showvis/core/stateful_collections.dart';
 
 class ShowsCatalogEntity extends Entity {
-  const ShowsCatalogEntity(
-      {this.shows = const {}, this.state = EntityState.initial});
+  ShowsCatalogEntity(
+      {this.shows = const {},
+      this.state = EntityState.initial,
+      StatefulMap<int, Map<int, Episode>>? episodes})
+      : episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
   final Map<int, Show> shows;
   final EntityState state;
 
-  ShowsCatalogEntity merge({Map<int, Show>? shows, EntityState? state}) =>
+  final StatefulMap<int, Map<int, Episode>> episodes;
+
+  ShowsCatalogEntity merge(
+          {Map<int, Show>? shows,
+          EntityState? state,
+          StatefulMap<int, Map<int, Episode>>? episodes}) =>
       ShowsCatalogEntity(
         shows: shows ?? this.shows,
         state: state ?? this.state,
+        episodes: episodes ?? this.episodes,
       );
 
   @override
-  List<Object?> get props => [shows, state];
+  List<Object?> get props => [shows, state, episodes];
 }
 
 enum EntityState { initial, loading, networkError, completed }
@@ -41,10 +51,9 @@ class Show extends Equatable {
         smallImageUri: json['image']['medium'] ?? '',
         largeImageUri: json['image']['original'] ?? '',
         genres: [for (String genre in json['genres'] ?? const []) genre],
-        premiered: DateTime.tryParse(json['premiered']) ?? DateTime.now(),
+        premiered: DateTime.parse(json['premiered'] ?? '2099-01-01'),
         ended: DateTime.parse(json['ended'] ?? '2099-01-01'),
-        timeSchedule:
-            DateTime.tryParse(json['schedule']['time']) ?? DateTime.now(),
+        timeSchedule: json['schedule']['time'] ?? '',
         daysSchedule: [
           for (String day in json['schedule']['days'] ?? const []) day
         ],
@@ -56,12 +65,12 @@ class Show extends Equatable {
 
   final int id;
   final String name;
-  final String smallImageUri; // TODO Replace with Uri class
-  final String largeImageUri; // TODO Replace with Uri class
+  final String smallImageUri;
+  final String largeImageUri;
   final List<String> genres; //TODO Convert to enum
   final DateTime premiered;
   final DateTime ended;
-  final DateTime timeSchedule;
+  final String timeSchedule;
   final List<String> daysSchedule;
   final String summary;
   final double rating;
@@ -80,4 +89,39 @@ class Show extends Equatable {
         summary,
         rating,
       ];
+}
+
+class Episode extends Equatable {
+  final int id;
+  final String name;
+  final int season;
+  final int number;
+  final String summary;
+  final String imageUrl;
+  final DateTime airDate;
+
+  const Episode({
+    required this.id,
+    required this.name,
+    required this.season,
+    required this.number,
+    required this.summary,
+    required this.imageUrl,
+    required this.airDate,
+  });
+
+  factory Episode.fromJson(Map<String, dynamic> json) => Episode(
+        id: json['id'],
+        name: json['name'] ?? '',
+        season: json['season'],
+        number: json['number'],
+        summary: parse(json['summary']).documentElement!.text,
+        imageUrl: json['image']['medium'] ?? '',
+        airDate: DateTime.parse(
+            '${json['airdate'] ?? '2099-01-01'} ${json['airtime'] ?? '00:00'}'),
+      );
+
+  @override
+  List<Object?> get props =>
+      [id, name, season, number, summary, imageUrl, airDate];
 }

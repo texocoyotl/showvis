@@ -15,11 +15,6 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
     useCase.fetch();
   }
 
-  // @override
-  // void onUpdate(context, entity) {
-  //   if (entity.state == EntityState.networkError) {}
-  // }
-
   @override
   ShowsCatalogViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {

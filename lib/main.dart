@@ -29,9 +29,10 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.light().copyWith(
           primary: Colors.deepPurple,
         ),
+        indicatorColor: Colors.white,
         textTheme: ThemeData.light().textTheme.copyWith(
               bodyLarge: ThemeData.light().textTheme.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
+                    //fontWeight: FontWeight.bold,
                     height: 1.5,
                   ),
             ),
