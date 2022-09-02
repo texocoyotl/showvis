@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
-import 'package:showvis/core/sliver_app_bar.dart';
+import 'package:showvis/features/shows_catalog/presentation/details/sliver_app_bar.dart';
 import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_presenter.dart';
@@ -113,12 +113,12 @@ class EpisodesWidget extends StatelessWidget {
     return ListView.builder(
       itemCount: viewModel.episodes.map.length,
       itemBuilder: (context, index) {
+        final season = viewModel.episodes.map.keys.elementAt(index);
         return ExpansionTile(
           initiallyExpanded: index == 0,
-          title: Text('Season ${index + 1}'),
+          title: Text('Season $season'),
           children: [
-            for (Episode episode in viewModel.episodes
-                .map[viewModel.episodes.map.keys.elementAt(index)].values)
+            for (Episode episode in viewModel.episodes.map[season].values)
               ListTile(
                 leading: SizedBox(
                     height: 50,
@@ -132,7 +132,6 @@ class EpisodesWidget extends StatelessWidget {
                             (context, url, downloadProgress) =>
                                 const CupertinoActivityIndicator(
                           radius: 16,
-                          //value: downloadProgress.progress,
                           color: Colors.black87,
                         ),
                       ),
