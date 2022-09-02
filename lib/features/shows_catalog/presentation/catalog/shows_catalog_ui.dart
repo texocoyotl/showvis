@@ -25,7 +25,8 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
       return _loadingBody(context, viewModel);
     }
     if (viewModel is ShowsCatalogSuccessViewModel) {
-      return _successBody(context, viewModel);
+      return _successBody(context, viewModel, viewModel.goToPreviousPage,
+          viewModel.goToNextPage);
     }
     return Container();
   }
@@ -48,15 +49,38 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
       const Center(child: CircularProgressIndicator());
 
   Widget _successBody(
-          BuildContext context, ShowsCatalogSuccessViewModel viewModel) =>
-      ListView(
-        children: viewModel.shows
-            .map((show) => _showRow(show, viewModel.openDetails))
-            .toList(),
+          BuildContext context,
+          ShowsCatalogSuccessViewModel viewModel,
+          VoidCallback goToPreviousPage,
+          VoidCallback goToNextPage) =>
+      Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            children: [
+              ElevatedButton(
+                  onPressed: goToPreviousPage, child: const Text('Back')),
+              ElevatedButton(
+                  onPressed: goToNextPage, child: const Text('Next')),
+            ],
+          ),
+          Expanded(
+            child: ListView(
+              children: viewModel.shows
+                  .map((show) => _showRow(show, viewModel.openDetails))
+                  .toList(),
+            ),
+          ),
+        ],
       );
 
-  Widget _showRow(Show show, ValueChanged<int> openDetails) => Card(
+  Widget _showRow(
+    Show show,
+    ValueChanged<int> openDetails,
+  ) =>
+      Card(
         child: ListTile(
+          leading: Text(show.id.toString()),
           title: Text(show.name),
           onTap: () => openDetails(show.id),
         ),

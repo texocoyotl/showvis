@@ -20,10 +20,15 @@ class ShowsCatalogNetworkFailureViewModel extends ShowsCatalogViewModel {
 
 class ShowsCatalogSuccessViewModel extends ShowsCatalogViewModel {
   const ShowsCatalogSuccessViewModel(
-      {required this.shows, required this.openDetails});
+      {required this.shows,
+      required this.openDetails,
+      required this.goToPreviousPage,
+      required this.goToNextPage});
 
   final List<Show> shows;
   final ValueChanged<int> openDetails;
+  final VoidCallback goToPreviousPage;
+  final VoidCallback goToNextPage;
 
   @override
   List<Object?> get props => [shows];

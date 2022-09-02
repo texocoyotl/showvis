@@ -4,29 +4,27 @@ import 'package:html/parser.dart';
 import 'package:showvis/core/stateful_collections.dart';
 
 class ShowsCatalogEntity extends Entity {
-  ShowsCatalogEntity(
-      {this.shows = const {},
-      this.state = EntityState.initial,
-      StatefulMap<int, Map<int, Episode>>? episodes})
-      : episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
+  ShowsCatalogEntity({
+    StatefulList<Show>? showsInView,
+    StatefulMap<int, Map<int, Episode>>? episodes,
+  })  : showsInView = showsInView ?? StatefulList<Show>(),
+        episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
-  final Map<int, Show> shows;
-  final EntityState state;
-
+  final StatefulList<Show> showsInView;
   final StatefulMap<int, Map<int, Episode>> episodes;
 
   ShowsCatalogEntity merge(
           {Map<int, Show>? shows,
           EntityState? state,
+          StatefulList<Show>? showsInView,
           StatefulMap<int, Map<int, Episode>>? episodes}) =>
       ShowsCatalogEntity(
-        shows: shows ?? this.shows,
-        state: state ?? this.state,
+        showsInView: showsInView ?? this.showsInView,
         episodes: episodes ?? this.episodes,
       );
 
   @override
-  List<Object?> get props => [shows, state, episodes];
+  List<Object?> get props => [showsInView, episodes];
 }
 
 enum EntityState { initial, loading, networkError, completed }

@@ -1,13 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
-import 'package:showvis/features/shows_catalog/presentation/details/sliver_app_bar.dart';
-import 'package:showvis/core/stateful_collections.dart';
-import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
-import 'package:showvis/features/shows_catalog/presentation/details/show_details_presenter.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_ui.dart';
-import 'package:showvis/features/shows_catalog/presentation/details/show_details_view_model.dart';
 import 'package:showvis/features/shows_catalog/presentation/episode/episode_presenter.dart';
 import 'package:showvis/features/shows_catalog/presentation/episode/episode_view_model.dart';
 

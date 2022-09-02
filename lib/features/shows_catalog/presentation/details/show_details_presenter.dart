@@ -22,9 +22,7 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
   @override
   ShowDetailsViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    // TODO It might be possible to fail to match an id with its data in the catalog,
-    // so there should be a failure model to cover that edge case
-    final show = entity.shows[id]!;
+    final show = entity.showsInView.list[id];
 
     return ShowDetailsViewModel(
       name: show.name,

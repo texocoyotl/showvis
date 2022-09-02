@@ -9,7 +9,8 @@ abstract class HttpClient {
 
 class HttpClientImpl implements HttpClient {
   HttpClientImpl({required this.baseUrl, ConsoleClient? client})
-      : _client = client ?? ConsoleClient();
+      : _client =
+            client ?? ConsoleClient(idleTimeout: const Duration(seconds: 5));
 
   final ConsoleClient _client;
   final String baseUrl;

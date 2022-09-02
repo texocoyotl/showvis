@@ -7,25 +7,63 @@ import 'package:showvis/main.dart';
 class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
   ShowsCatalogUseCase() : super(entity: ShowsCatalogEntity());
 
-  void fetch() async {
-    // this will create a new view model, followed by an UI update
-    entity = entity.merge(state: EntityState.loading);
+  static int showsPerView = 25; //TODO Change to a shared preferences value
+  static int showsPerAPICall = 250;
 
-    final JsonResponse res =
-        await getIt<HttpClient>().query(path: 'shows?page=0');
+  int _currentPageOfShowsInView = 0;
+  final Map<int, Show> _shows = {};
 
-    if (res is JsonFailureResponse) {
-      entity = entity.merge(state: EntityState.networkError);
+  void fetchShowsInViewNextPage({direction = ShowsNavigation.current}) async {
+    if (direction == ShowsNavigation.forward) {
+      _currentPageOfShowsInView++;
+    } else if (direction == ShowsNavigation.backwards &&
+        _currentPageOfShowsInView > 0) {
+      _currentPageOfShowsInView--;
+    } else if (direction == ShowsNavigation.backwards &&
+        _currentPageOfShowsInView == 0) {
       return;
     }
 
-    // With successful data received, the state obtains the response, producing
-    // the normal view model / UI update
-    final List<dynamic> list = (res as JsonSuccessResponse).content;
     entity = entity.merge(
-      state: EntityState.completed,
-      shows: {for (var show in list) show['id']: Show.fromJson(show)},
-    );
+        showsInView:
+            StatefulList<Show>(list: const [], state: CollectionState.loading));
+
+    final initialShowID = _currentPageOfShowsInView * showsPerView + 1;
+    final lastShowID = _currentPageOfShowsInView * showsPerView + showsPerView;
+
+    final showsFound = await _fetchShowsCatalogIfNeeded(initialShowID);
+    if (!showsFound) {
+      entity = entity.merge(
+          showsInView: StatefulList<Show>(
+              list: const [], state: CollectionState.networkError));
+      return;
+    }
+
+    final Map<int, Show> showsPerPage = Map.from(_shows)
+      ..removeWhere((k, v) => k < initialShowID || k > lastShowID);
+
+    entity = entity.merge(
+        showsInView: StatefulList<Show>(
+            list: showsPerPage.values.toList(),
+            state: CollectionState.populated));
+  }
+
+  Future<bool> _fetchShowsCatalogIfNeeded(int initialShowID) async {
+    if (_shows.containsKey(initialShowID)) return true;
+
+    final page = (initialShowID / showsPerAPICall).floor();
+
+    print('Query for Shows on Page $page');
+
+    final JsonResponse res =
+        await getIt<HttpClient>().query(path: 'shows?page=$page');
+
+    if (res is JsonFailureResponse) return false;
+
+    final List<dynamic> list = (res as JsonSuccessResponse).content;
+
+    _shows.addAll({for (var show in list) show['id']: Show.fromJson(show)});
+    return true;
   }
 
   void clearEpisodes() {
@@ -74,3 +112,5 @@ final showsCatalogUseCase =
     UseCaseProvider<ShowsCatalogEntity, ShowsCatalogUseCase>(
   (_) => ShowsCatalogUseCase(),
 );
+
+enum ShowsNavigation { backwards, current, forward }
