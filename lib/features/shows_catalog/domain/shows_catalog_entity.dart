@@ -6,25 +6,29 @@ import 'package:showvis/core/stateful_collections.dart';
 class ShowsCatalogEntity extends Entity {
   ShowsCatalogEntity({
     StatefulList<Show>? showsInView,
+    this.fromSearch = false,
     StatefulMap<int, Map<int, Episode>>? episodes,
   })  : showsInView = showsInView ?? StatefulList<Show>(),
         episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
   final StatefulList<Show> showsInView;
+  final bool fromSearch;
   final StatefulMap<int, Map<int, Episode>> episodes;
 
   ShowsCatalogEntity merge(
           {Map<int, Show>? shows,
+          bool? fromSearch,
           EntityState? state,
           StatefulList<Show>? showsInView,
           StatefulMap<int, Map<int, Episode>>? episodes}) =>
       ShowsCatalogEntity(
         showsInView: showsInView ?? this.showsInView,
+        fromSearch: fromSearch ?? this.fromSearch,
         episodes: episodes ?? this.episodes,
       );
 
   @override
-  List<Object?> get props => [showsInView, episodes];
+  List<Object?> get props => [showsInView, fromSearch, episodes];
 }
 
 enum EntityState { initial, loading, networkError, completed }

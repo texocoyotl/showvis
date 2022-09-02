@@ -13,13 +13,13 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
   int _currentPageOfShowsInView = 0;
   final Map<int, Show> _shows = {};
 
-  void fetchShowsInViewNextPage({direction = ShowsNavigation.current}) async {
-    if (direction == ShowsNavigation.forward) {
+  void fetchShowsInView({navigation = ShowsNavigation.current}) async {
+    if (navigation == ShowsNavigation.forward) {
       _currentPageOfShowsInView++;
-    } else if (direction == ShowsNavigation.backwards &&
+    } else if (navigation == ShowsNavigation.backwards &&
         _currentPageOfShowsInView > 0) {
       _currentPageOfShowsInView--;
-    } else if (direction == ShowsNavigation.backwards &&
+    } else if (navigation == ShowsNavigation.backwards &&
         _currentPageOfShowsInView == 0) {
       return;
     }
@@ -64,6 +64,27 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
 
     _shows.addAll({for (var show in list) show['id']: Show.fromJson(show)});
     return true;
+  }
+
+  Future<void> search(String text) async {
+    if (text.trim().isEmpty) return;
+
+    entity = entity.merge(
+        fromSearch: true,
+        showsInView:
+            StatefulList<Show>(list: const [], state: CollectionState.loading));
+
+    print('Search for Shows with $text');
+
+    final JsonResponse res = await getIt<HttpClient>().query(path: 'asdf');
+
+    if (res is JsonFailureResponse) {
+      entity = entity.merge(
+          fromSearch: true,
+          showsInView: StatefulList<Show>(
+              list: const [], state: CollectionState.networkError));
+      return;
+    }
   }
 
   void clearEpisodes() {

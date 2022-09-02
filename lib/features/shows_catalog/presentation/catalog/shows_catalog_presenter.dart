@@ -13,7 +13,7 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
 
   @override
   void onLayoutReady(context, useCase) {
-    useCase.fetchShowsInViewNextPage();
+    useCase.fetchShowsInView();
   }
 
   @override
@@ -25,16 +25,23 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
       return const ShowsCatalogLoadingViewModel();
     } else if (entity.showsInView.state == CollectionState.networkError) {
       return ShowsCatalogNetworkFailureViewModel(
-          retry: useCase.fetchShowsInViewNextPage);
+        retry: entity.fromSearch
+            ? useCase.search
+            : (_) => useCase.fetchShowsInView,
+        refresh: useCase.fetchShowsInView,
+      );
     }
     return ShowsCatalogSuccessViewModel(
         shows: entity.showsInView.list,
+        fromSearch: entity.fromSearch,
+        refresh: useCase.fetchShowsInView,
         openDetails: (id) {
           router.push('/details/$id');
         },
-        goToNextPage: () => useCase.fetchShowsInViewNextPage(
-            direction: ShowsNavigation.forward),
-        goToPreviousPage: () => useCase.fetchShowsInViewNextPage(
-            direction: ShowsNavigation.backwards));
+        search: useCase.search,
+        goToNextPage: () =>
+            useCase.fetchShowsInView(navigation: ShowsNavigation.forward),
+        goToPreviousPage: () =>
+            useCase.fetchShowsInView(navigation: ShowsNavigation.backwards));
   }
 }

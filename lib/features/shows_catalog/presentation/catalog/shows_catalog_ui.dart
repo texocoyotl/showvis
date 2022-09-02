@@ -1,3 +1,4 @@
+import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
@@ -7,13 +8,46 @@ import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalo
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});
 
+  final isSearchMode = ValueNotifier<bool>(false);
+  final searchText = ValueNotifier<String>('');
+
   @override
   Widget build(BuildContext context, ShowsCatalogViewModel viewModel) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ShowVis'),
+    return WillPopScope(
+      onWillPop: () async {
+        if (searchText.value != '') {
+          isSearchMode.value = false;
+          searchText.value = '';
+          if (viewModel is ShowsCatalogSuccessViewModel) viewModel.refresh();
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBarWithSearchSwitch(
+          customIsSearchModeNotifier: isSearchMode,
+          customTextNotifier: searchText,
+          closeOnSubmit: false,
+          clearOnSubmit: false,
+          onSubmitted: (viewModel is ShowsCatalogSuccessViewModel)
+              ? viewModel.search
+              : null,
+          onClosed: (viewModel is ShowsCatalogWithContentViewModel)
+              ? viewModel.refresh
+              : null,
+          appBarBuilder: (context) {
+            return AppBar(
+              title: const Text('ShowVis'),
+              actions: const [
+                AppBarSearchButton(
+                  buttonHasTwoStates: false,
+                ),
+              ],
+            );
+          },
+        ),
+        body: _body(context, viewModel),
       ),
-      body: _body(context, viewModel),
     );
   }
 
@@ -39,7 +73,8 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
             const Text(
                 'The list cannot be retrieved at this moment, please check you have Internet connection.'),
             ElevatedButton(
-                onPressed: viewModel.retry, child: const Text('Retry')),
+                onPressed: () => viewModel.retry(searchText.value),
+                child: const Text('Retry')),
           ],
         ),
       );
