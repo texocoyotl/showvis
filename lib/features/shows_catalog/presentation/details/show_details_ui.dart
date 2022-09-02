@@ -125,16 +125,21 @@ class EpisodesWidget extends StatelessWidget {
                     width: 50,
                     child: Hero(
                       tag: episode.imageUrl,
-                      child: CachedNetworkImage(
-                        imageUrl: episode.imageUrl,
-                        fit: BoxFit.cover,
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                const CupertinoActivityIndicator(
-                          radius: 16,
-                          color: Colors.black87,
-                        ),
-                      ),
+                      child: episode.imageUrl.isEmpty
+                          ? const Image(
+                              image: AssetImage('assets/no_image.png'))
+                          : CachedNetworkImage(
+                              imageUrl: episode.imageUrl,
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      const CupertinoActivityIndicator(
+                                radius: 16,
+                                color: Colors.black87,
+                              ),
+                            ),
                     )),
                 title: Text('${episode.number} - ${episode.name}'),
                 onTap: () {

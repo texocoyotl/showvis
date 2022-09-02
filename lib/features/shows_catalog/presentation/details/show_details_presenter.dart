@@ -22,17 +22,16 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
   @override
   ShowDetailsViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    final show = entity.showsInView.list[id];
+    final show = entity.showsInView.map[id]!;
 
     return ShowDetailsViewModel(
       name: show.name,
       largeImageUri: show.largeImageUri,
       genres: show.genres.join(' | '),
-      premiered: show.ended.isAfter(DateTime.now())
-          ? 'Unknown'
-          : '${DateFormat.MMM().format(show.premiered)} ${DateFormat.y().format(show.premiered)}',
-      ended: show.ended.isAfter(DateTime.now())
-          ? 'Currently airing'
+      premiered:
+          '${DateFormat.MMM().format(show.premiered)} ${DateFormat.y().format(show.premiered)}',
+      ended: show.ended == DateTime.parse('2099-01-01')
+          ? 'Not ended yet'
           : '${DateFormat.MMM().format(show.ended)} ${DateFormat.y().format(show.ended)}',
       timeSchedule: show.timeSchedule,
       daysSchedule: show.daysSchedule.join(', '),

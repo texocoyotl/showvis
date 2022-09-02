@@ -20,11 +20,12 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
   ShowsCatalogViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
     if (entity.showsInView.state == CollectionState.initial) {
-      return const ShowsCatalogViewModel();
+      return ShowsCatalogViewModel(fromSearch: entity.fromSearch);
     } else if (entity.showsInView.state == CollectionState.loading) {
-      return const ShowsCatalogLoadingViewModel();
+      return ShowsCatalogLoadingViewModel(fromSearch: entity.fromSearch);
     } else if (entity.showsInView.state == CollectionState.networkError) {
       return ShowsCatalogNetworkFailureViewModel(
+        fromSearch: entity.fromSearch,
         retry: entity.fromSearch
             ? useCase.search
             : (_) => useCase.fetchShowsInView,
@@ -32,7 +33,7 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
       );
     }
     return ShowsCatalogSuccessViewModel(
-        shows: entity.showsInView.list,
+        shows: entity.showsInView.map.values.toList(),
         fromSearch: entity.fromSearch,
         refresh: useCase.fetchShowsInView,
         openDetails: (id) {

@@ -25,8 +25,8 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
     }
 
     entity = entity.merge(
-        showsInView:
-            StatefulList<Show>(list: const [], state: CollectionState.loading));
+        showsInView: StatefulMap<int, Show>(
+            map: const {}, state: CollectionState.loading));
 
     final initialShowID = _currentPageOfShowsInView * showsPerView + 1;
     final lastShowID = _currentPageOfShowsInView * showsPerView + showsPerView;
@@ -34,8 +34,9 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
     final showsFound = await _fetchShowsCatalogIfNeeded(initialShowID);
     if (!showsFound) {
       entity = entity.merge(
-          showsInView: StatefulList<Show>(
-              list: const [], state: CollectionState.networkError));
+          fromSearch: false,
+          showsInView: StatefulMap<int, Show>(
+              map: const {}, state: CollectionState.networkError));
       return;
     }
 
@@ -43,9 +44,9 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
       ..removeWhere((k, v) => k < initialShowID || k > lastShowID);
 
     entity = entity.merge(
-        showsInView: StatefulList<Show>(
-            list: showsPerPage.values.toList(),
-            state: CollectionState.populated));
+        fromSearch: false,
+        showsInView: StatefulMap<int, Show>(
+            map: showsPerPage, state: CollectionState.populated));
   }
 
   Future<bool> _fetchShowsCatalogIfNeeded(int initialShowID) async {
@@ -71,20 +72,28 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
 
     entity = entity.merge(
         fromSearch: true,
-        showsInView:
-            StatefulList<Show>(list: const [], state: CollectionState.loading));
+        showsInView: StatefulMap<int, Show>(
+            map: const {}, state: CollectionState.loading));
 
     print('Search for Shows with $text');
 
-    final JsonResponse res = await getIt<HttpClient>().query(path: 'asdf');
+    final JsonResponse res =
+        await getIt<HttpClient>().query(path: 'search/shows?q=$text');
 
     if (res is JsonFailureResponse) {
       entity = entity.merge(
           fromSearch: true,
-          showsInView: StatefulList<Show>(
-              list: const [], state: CollectionState.networkError));
+          showsInView: StatefulMap<int, Show>(
+              map: const {}, state: CollectionState.networkError));
       return;
     }
+
+    final List<dynamic> list = (res as JsonSuccessResponse).content;
+
+    entity = entity.merge(
+        showsInView: StatefulMap<int, Show>(map: {
+      for (var show in list) show['show']['id']: Show.fromJson(show['show'])
+    }, state: CollectionState.populated));
   }
 
   void clearEpisodes() {

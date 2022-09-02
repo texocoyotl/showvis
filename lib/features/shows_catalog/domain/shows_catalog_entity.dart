@@ -5,13 +5,13 @@ import 'package:showvis/core/stateful_collections.dart';
 
 class ShowsCatalogEntity extends Entity {
   ShowsCatalogEntity({
-    StatefulList<Show>? showsInView,
+    StatefulMap<int, Show>? showsInView,
     this.fromSearch = false,
     StatefulMap<int, Map<int, Episode>>? episodes,
-  })  : showsInView = showsInView ?? StatefulList<Show>(),
+  })  : showsInView = showsInView ?? StatefulMap<int, Show>(),
         episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
-  final StatefulList<Show> showsInView;
+  final StatefulMap<int, Show> showsInView;
   final bool fromSearch;
   final StatefulMap<int, Map<int, Episode>> episodes;
 
@@ -19,7 +19,7 @@ class ShowsCatalogEntity extends Entity {
           {Map<int, Show>? shows,
           bool? fromSearch,
           EntityState? state,
-          StatefulList<Show>? showsInView,
+          StatefulMap<int, Show>? showsInView,
           StatefulMap<int, Map<int, Episode>>? episodes}) =>
       ShowsCatalogEntity(
         showsInView: showsInView ?? this.showsInView,
@@ -50,8 +50,10 @@ class Show extends Equatable {
   factory Show.fromJson(Map<String, dynamic> json) => Show(
         id: json['id'] ?? 0,
         name: json['name'] ?? '',
-        smallImageUri: json['image']['medium'] ?? '',
-        largeImageUri: json['image']['original'] ?? '',
+        smallImageUri:
+            (json['image'] == null) ? '' : json['image']['medium'] ?? '',
+        largeImageUri:
+            (json['image'] == null) ? '' : json['image']['original'] ?? '',
         genres: [for (String genre in json['genres'] ?? const []) genre],
         premiered: DateTime.parse(json['premiered'] ?? '2099-01-01'),
         ended: DateTime.parse(json['ended'] ?? '2099-01-01'),
@@ -117,8 +119,9 @@ class Episode extends Equatable {
         name: json['name'] ?? '',
         season: json['season'],
         number: json['number'],
-        summary: parse(json['summary']).documentElement!.text,
-        imageUrl: json['image']['original'] ?? '',
+        summary: parse(json['summary'] ?? '').documentElement!.text,
+        imageUrl:
+            (json['image'] == null) ? '' : json['image']['original'] ?? '',
         airDate: DateTime.parse(
             '${json['airdate'] ?? '2099-01-01'} ${json['airtime'] ?? '00:00'}'),
       );

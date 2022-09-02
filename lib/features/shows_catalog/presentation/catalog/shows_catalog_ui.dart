@@ -8,11 +8,11 @@ import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalo
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});
 
-  final isSearchMode = ValueNotifier<bool>(false);
   final searchText = ValueNotifier<String>('');
 
   @override
   Widget build(BuildContext context, ShowsCatalogViewModel viewModel) {
+    final isSearchMode = ValueNotifier<bool>((viewModel.fromSearch));
     return WillPopScope(
       onWillPop: () async {
         if (searchText.value != '') {
@@ -29,6 +29,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
           customTextNotifier: searchText,
           closeOnSubmit: false,
           clearOnSubmit: false,
+          clearOnClose: true,
           onSubmitted: (viewModel is ShowsCatalogSuccessViewModel)
               ? viewModel.search
               : null,
@@ -91,13 +92,16 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
       Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Row(
-            children: [
-              ElevatedButton(
-                  onPressed: goToPreviousPage, child: const Text('Back')),
-              ElevatedButton(
-                  onPressed: goToNextPage, child: const Text('Next')),
-            ],
+          Visibility(
+            visible: !viewModel.fromSearch,
+            child: Row(
+              children: [
+                ElevatedButton(
+                    onPressed: goToPreviousPage, child: const Text('Back')),
+                ElevatedButton(
+                    onPressed: goToNextPage, child: const Text('Next')),
+              ],
+            ),
           ),
           Expanded(
             child: ListView(

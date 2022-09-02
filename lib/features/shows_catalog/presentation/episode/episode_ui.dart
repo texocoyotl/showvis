@@ -24,7 +24,9 @@ class EpisodeUI extends UI<EpisodeViewModel> {
       body: ListView(children: [
         Hero(
             tag: viewModel.imageUrl,
-            child: CachedNetworkImage(imageUrl: viewModel.imageUrl)),
+            child: viewModel.imageUrl.isEmpty
+                ? const Image(image: AssetImage('assets/no_image.png'))
+                : CachedNetworkImage(imageUrl: viewModel.imageUrl)),
         Padding(
             padding: const EdgeInsets.all(16),
             child: Text(

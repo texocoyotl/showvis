@@ -3,17 +3,22 @@ import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 
 class ShowsCatalogViewModel extends ViewModel {
-  const ShowsCatalogViewModel();
+  const ShowsCatalogViewModel({
+    required this.fromSearch,
+  });
+
+  final bool fromSearch;
   @override
   List<Object?> get props => [];
 }
 
 class ShowsCatalogLoadingViewModel extends ShowsCatalogViewModel {
-  const ShowsCatalogLoadingViewModel();
+  const ShowsCatalogLoadingViewModel({required super.fromSearch});
 }
 
 class ShowsCatalogWithContentViewModel extends ShowsCatalogViewModel {
-  const ShowsCatalogWithContentViewModel({required this.refresh});
+  const ShowsCatalogWithContentViewModel(
+      {required super.fromSearch, required this.refresh});
 
   final VoidCallback refresh;
 }
@@ -21,7 +26,7 @@ class ShowsCatalogWithContentViewModel extends ShowsCatalogViewModel {
 class ShowsCatalogNetworkFailureViewModel
     extends ShowsCatalogWithContentViewModel {
   const ShowsCatalogNetworkFailureViewModel(
-      {required this.retry, required super.refresh});
+      {required this.retry, required super.fromSearch, required super.refresh});
 
   final ValueChanged<String> retry;
 }
@@ -29,7 +34,7 @@ class ShowsCatalogNetworkFailureViewModel
 class ShowsCatalogSuccessViewModel extends ShowsCatalogWithContentViewModel {
   const ShowsCatalogSuccessViewModel(
       {required this.shows,
-      required this.fromSearch,
+      required super.fromSearch,
       required super.refresh,
       required this.openDetails,
       required this.search,
@@ -37,7 +42,7 @@ class ShowsCatalogSuccessViewModel extends ShowsCatalogWithContentViewModel {
       required this.goToNextPage});
 
   final List<Show> shows;
-  final bool fromSearch;
+
   final ValueChanged<int> openDetails;
   final ValueChanged<String> search;
   final VoidCallback goToPreviousPage;
