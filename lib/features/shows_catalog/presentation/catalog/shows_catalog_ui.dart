@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
-import 'package:showvis/features/shows_catalog/presentation/shows_catalog_presenter.dart';
-import 'package:showvis/features/shows_catalog/presentation/shows_catalog_view_model.dart';
+import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_presenter.dart';
+import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_view_model.dart';
 
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});

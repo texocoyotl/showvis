@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/core/stateful_collections.dart';
-import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 
 class ShowDetailsViewModel extends ViewModel {
   const ShowDetailsViewModel({

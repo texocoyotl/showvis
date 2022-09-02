@@ -1,7 +1,7 @@
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_usecase.dart';
-import 'package:showvis/features/shows_catalog/presentation/shows_catalog_view_model.dart';
+import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_view_model.dart';
 import 'package:showvis/router.dart';
 
 class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
