@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/core/models.dart';
-import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
+
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_presenter.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_view_model.dart';
 import 'package:very_good_infinite_list/very_good_infinite_list.dart';
@@ -38,7 +38,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
           onClosed: viewModel.refresh,
           appBarBuilder: (context) {
             return AppBar(
-              title: const Text('ShowVis'),
+              title: const Text('All Shows'),
               actions: const [
                 AppBarSearchButton(
                   buttonHasTwoStates: false,
@@ -47,6 +47,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
             );
           },
         ),
+        //drawer: const MainDrawer(),
         body: _body(context, viewModel),
       ),
     );

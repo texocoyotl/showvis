@@ -2,11 +2,12 @@ import 'package:go_router/go_router.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_ui.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_ui.dart';
 import 'package:showvis/features/shows_catalog/presentation/episode/episode_ui.dart';
+import 'package:showvis/home.dart';
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: <GoRoute>[
   GoRoute(
     path: '/',
-    builder: (context, state) => ShowsCatalogUI(),
+    builder: (context, state) => const HomeScreen(),
   ),
   GoRoute(
     path: '/details/:id',
