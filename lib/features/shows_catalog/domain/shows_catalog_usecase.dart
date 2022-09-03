@@ -7,26 +7,22 @@ import 'package:showvis/main.dart';
 class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
   ShowsCatalogUseCase() : super(entity: ShowsCatalogEntity());
 
-  static int showsPerView = 25; //TODO Change to a shared preferences value
+  static int showsPerView = 250; //TODO Change to a shared preferences value
   static int showsPerAPICall = 250;
 
   int _currentPageOfShowsInView = 0;
   final Map<int, Show> _shows = {};
 
-  void fetchShowsInView({navigation = ShowsNavigation.current}) async {
-    if (navigation == ShowsNavigation.forward) {
+  void fetchShowsInView() async {
+    if (entity.showsInView.map.isNotEmpty) {
       _currentPageOfShowsInView++;
-    } else if (navigation == ShowsNavigation.backwards &&
-        _currentPageOfShowsInView > 0) {
-      _currentPageOfShowsInView--;
-    } else if (navigation == ShowsNavigation.backwards &&
-        _currentPageOfShowsInView == 0) {
-      return;
     }
 
+    final map = (entity.fromSearch) ? <int, Show>{} : entity.showsInView.map;
     entity = entity.merge(
-        showsInView: StatefulMap<int, Show>(
-            map: const {}, state: CollectionState.loading));
+        fromSearch: false,
+        showsInView:
+            StatefulMap<int, Show>(map: map, state: CollectionState.loading));
 
     final initialShowID = _currentPageOfShowsInView * showsPerView + 1;
     final lastShowID = _currentPageOfShowsInView * showsPerView + showsPerView;
@@ -41,12 +37,15 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
     }
 
     final Map<int, Show> showsPerPage = Map.from(_shows)
-      ..removeWhere((k, v) => k < initialShowID || k > lastShowID);
+      ..removeWhere((k, v) => k > lastShowID);
 
     entity = entity.merge(
         fromSearch: false,
         showsInView: StatefulMap<int, Show>(
-            map: showsPerPage, state: CollectionState.populated));
+            map: Map.from(entity.showsInView.map)..addAll(showsPerPage),
+            state: CollectionState.populated));
+
+    print(entity.showsInView.map.length);
   }
 
   Future<bool> _fetchShowsCatalogIfNeeded(int initialShowID) async {

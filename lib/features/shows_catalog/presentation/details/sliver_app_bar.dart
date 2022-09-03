@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget {
-  // 1
   final String text;
   final String imagePath;
   final bool centerTitle;
@@ -55,19 +54,22 @@ class AppBarWidget extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: Padding(
             padding: const EdgeInsets.only(top: 76.0, bottom: 48),
-            child: imagePath.isEmpty
-                ? const Image(image: AssetImage('assets/no_image.png'))
-                : CachedNetworkImage(
-                    imageUrl: imagePath,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            const CupertinoActivityIndicator(
-                      radius: 50,
-                      //value: downloadProgress.progress,
-                      color: Colors.black87,
+            child: Hero(
+              tag: text,
+              child: imagePath.isEmpty
+                  ? const Image(image: AssetImage('assets/no_image.png'))
+                  : CachedNetworkImage(
+                      imageUrl: imagePath,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              const CupertinoActivityIndicator(
+                        radius: 50,
+                        //value: downloadProgress.progress,
+                        color: Colors.black87,
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
-                  ),
+            ),
           ),
         ),
       ),

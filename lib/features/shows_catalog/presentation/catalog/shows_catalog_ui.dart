@@ -1,9 +1,12 @@
 import 'package:app_bar_with_search_switch/app_bar_with_search_switch.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_presenter.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_view_model.dart';
+import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});
@@ -18,7 +21,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
         if (searchText.value != '') {
           isSearchMode.value = false;
           searchText.value = '';
-          if (viewModel is ShowsCatalogSuccessViewModel) viewModel.refresh();
+          viewModel.refresh();
           return false;
         }
         return true;
@@ -30,12 +33,8 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
           closeOnSubmit: false,
           clearOnSubmit: false,
           clearOnClose: true,
-          onSubmitted: (viewModel is ShowsCatalogSuccessViewModel)
-              ? viewModel.search
-              : null,
-          onClosed: (viewModel is ShowsCatalogWithContentViewModel)
-              ? viewModel.refresh
-              : null,
+          onSubmitted: viewModel.search,
+          onClosed: viewModel.refresh,
           appBarBuilder: (context) {
             return AppBar(
               title: const Text('ShowVis'),
@@ -52,77 +51,63 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
     );
   }
 
-  Widget _body(BuildContext context, ShowsCatalogViewModel viewModel) {
-    if (viewModel is ShowsCatalogNetworkFailureViewModel) {
-      return _errorBody(context, viewModel);
-    }
-    if (viewModel is ShowsCatalogLoadingViewModel) {
-      return _loadingBody(context, viewModel);
-    }
-    if (viewModel is ShowsCatalogSuccessViewModel) {
-      return _successBody(context, viewModel, viewModel.goToPreviousPage,
-          viewModel.goToNextPage);
-    }
-    return Container();
-  }
-
-  Widget _errorBody(BuildContext context,
-          ShowsCatalogNetworkFailureViewModel viewModel) =>
-      Center(
-        child: Column(
+  Widget _body(
+    BuildContext context,
+    ShowsCatalogViewModel viewModel,
+  ) {
+    return InfiniteList(
+      itemCount: viewModel.shows.length,
+      isLoading: viewModel.isLoading,
+      hasError: viewModel.hasError,
+      onFetchData: !viewModel.fromSearch ? viewModel.goToNextPage : () {},
+      separatorBuilder: (context) => const Divider(),
+      itemBuilder: (context, index) {
+        return _showRow(viewModel.shows[index], viewModel.openDetails);
+      },
+      errorBuilder: (context) {
+        return Column(
           children: [
             const Text(
                 'The list cannot be retrieved at this moment, please check you have Internet connection.'),
             ElevatedButton(
-                onPressed: () => viewModel.retry(searchText.value),
-                child: const Text('Retry')),
+                onPressed: viewModel.refresh, child: const Text('Retry')),
           ],
-        ),
-      );
-
-  Widget _loadingBody(
-          BuildContext context, ShowsCatalogLoadingViewModel viewModel) =>
-      const Center(child: CircularProgressIndicator());
-
-  Widget _successBody(
-          BuildContext context,
-          ShowsCatalogSuccessViewModel viewModel,
-          VoidCallback goToPreviousPage,
-          VoidCallback goToNextPage) =>
-      Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Visibility(
-            visible: !viewModel.fromSearch,
-            child: Row(
-              children: [
-                ElevatedButton(
-                    onPressed: goToPreviousPage, child: const Text('Back')),
-                ElevatedButton(
-                    onPressed: goToNextPage, child: const Text('Next')),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              children: viewModel.shows
-                  .map((show) => _showRow(show, viewModel.openDetails))
-                  .toList(),
-            ),
-          ),
-        ],
-      );
+        );
+      },
+    );
+  }
 
   Widget _showRow(
     Show show,
     ValueChanged<int> openDetails,
   ) =>
-      Card(
-        child: ListTile(
-          leading: Text(show.id.toString()),
-          title: Text(show.name),
-          onTap: () => openDetails(show.id),
+      ListTile(
+        leading: Hero(
+          tag: show.name,
+          child: show.largeImageUri.isEmpty
+              ? const Image(image: AssetImage('assets/no_image.png'))
+              : CachedNetworkImage(
+                  imageUrl: show.largeImageUri,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      const CupertinoActivityIndicator(
+                    radius: 10,
+                    //value: downloadProgress.progress,
+                    color: Colors.black87,
+                  ),
+                  height: 150,
+                ),
         ),
+        title: Text(show.name),
+        trailing: SizedBox(
+          height: 64,
+          width: 64,
+          child: Stack(alignment: Alignment.center, children: [
+            const Center(
+                child: Icon(Icons.star, color: Colors.yellow, size: 54)),
+            Center(child: Text(show.rating.toString()))
+          ]),
+        ),
+        onTap: () => openDetails(show.id),
       );
 
   @override

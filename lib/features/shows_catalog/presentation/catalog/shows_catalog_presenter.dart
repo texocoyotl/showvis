@@ -12,37 +12,21 @@ class ShowsCatalogPresenter extends Presenter<ShowsCatalogUseCase,
       : super(builder: builder, provider: showsCatalogUseCase);
 
   @override
-  void onLayoutReady(context, useCase) {
-    useCase.fetchShowsInView();
-  }
-
-  @override
   ShowsCatalogViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    if (entity.showsInView.state == CollectionState.initial) {
-      return ShowsCatalogViewModel(fromSearch: entity.fromSearch);
-    } else if (entity.showsInView.state == CollectionState.loading) {
-      return ShowsCatalogLoadingViewModel(fromSearch: entity.fromSearch);
-    } else if (entity.showsInView.state == CollectionState.networkError) {
-      return ShowsCatalogNetworkFailureViewModel(
-        fromSearch: entity.fromSearch,
-        retry: entity.fromSearch
-            ? useCase.search
-            : (_) => useCase.fetchShowsInView,
-        refresh: useCase.fetchShowsInView,
-      );
-    }
-    return ShowsCatalogSuccessViewModel(
-        shows: entity.showsInView.map.values.toList(),
-        fromSearch: entity.fromSearch,
-        refresh: useCase.fetchShowsInView,
-        openDetails: (id) {
-          router.push('/details/$id');
-        },
-        search: useCase.search,
-        goToNextPage: () =>
-            useCase.fetchShowsInView(navigation: ShowsNavigation.forward),
-        goToPreviousPage: () =>
-            useCase.fetchShowsInView(navigation: ShowsNavigation.backwards));
+    return ShowsCatalogViewModel(
+      shows: entity.showsInView.map.values.toList(),
+      fromSearch: entity.fromSearch,
+      isLoading: entity.showsInView.state == CollectionState.loading,
+      hasError: entity.showsInView.state == CollectionState.networkError,
+      refresh: useCase.fetchShowsInView,
+      openDetails: (id) {
+        router.push('/details/$id');
+      },
+      search: useCase.search,
+      goToNextPage: useCase.fetchShowsInView,
+      retry:
+          entity.fromSearch ? useCase.search : (_) => useCase.fetchShowsInView,
+    );
   }
 }
