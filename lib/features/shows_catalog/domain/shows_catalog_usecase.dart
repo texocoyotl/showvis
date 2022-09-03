@@ -1,12 +1,15 @@
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/core/models.dart';
 import 'package:showvis/core/stateful_collections.dart';
-import 'package:showvis/dependencies/http_client/http_client.dart';
+import 'package:showvis/dependencies/favorites_persistance.dart';
+import 'package:showvis/dependencies/http_client.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/main.dart';
 
 class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
-  ShowsCatalogUseCase() : super(entity: ShowsCatalogEntity());
+  ShowsCatalogUseCase() : super(entity: ShowsCatalogEntity()) {
+    _loadFavoriteShows();
+  }
 
   static int showsPerView = 250; //TODO Change to a shared preferences value
   static int showsPerAPICall = 250;
@@ -146,6 +149,13 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
           favoriteShows: Map.from(entity.favoriteShows)
             ..addAll({showId: _shows[showId]!}));
     }
+    getIt<FavoritesPersistance>().persistFavoriteShows(entity.favoriteShows);
+  }
+
+  Future<void> _loadFavoriteShows() async {
+    final favoriteShows =
+        await getIt<FavoritesPersistance>().retrieveFavoriteShows();
+    entity = entity.merge(favoriteShows: favoriteShows);
   }
 }
 

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:showvis/dependencies/http_client/http_client.dart';
+import 'package:showvis/dependencies/favorites_persistance.dart';
+import 'package:showvis/dependencies/http_client.dart';
 import 'package:showvis/router.dart';
 
 GetIt getIt = GetIt.instance;
 final globalContainer = ProviderContainer();
 
 void main() async {
-  getIt.registerSingleton<HttpClient>(
-      HttpClientImpl(baseUrl: 'https://api.tvmaze.com/'),
-      signalsReady: true,
-      dispose: (instance) => instance.dispose());
-
+  registerDependencies();
   runApp(UncontrolledProviderScope(
       container: globalContainer, child: const MyApp()));
 }
@@ -41,4 +38,17 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+void registerDependencies() {
+  getIt.registerSingleton<HttpClient>(
+    HttpClientImpl(baseUrl: 'https://api.tvmaze.com/'),
+    signalsReady: true,
+    dispose: (instance) => instance.dispose(),
+  );
+  getIt.registerSingleton<FavoritesPersistance>(
+    FavoritesPersistanceImpl(),
+    signalsReady: true,
+    dispose: (instance) => instance.dispose(),
+  );
 }

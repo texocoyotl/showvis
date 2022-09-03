@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:html/parser.dart';
+import 'package:intl/intl.dart';
 
 class Show extends Equatable {
   const Show({
@@ -15,6 +16,26 @@ class Show extends Equatable {
     required this.summary,
     required this.rating,
   });
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'image': {
+          'medium': smallImageUri,
+          'original': largeImageUri,
+        },
+        'genres': genres,
+        'premiered': premiered.toIso8601String(),
+        'ended': ended.toIso8601String(),
+        'schedule': {
+          'time': timeSchedule,
+          'days': daysSchedule,
+        },
+        'summary': '<p>$summary</p>',
+        'rating': {
+          'average': rating,
+        }
+      };
 
   factory Show.fromJson(Map<String, dynamic> json) => Show(
         id: json['id'] ?? 0,
