@@ -1,4 +1,5 @@
 import 'package:showvis/core/architecture_components.dart';
+import 'package:showvis/core/models.dart';
 import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/dependencies/http_client/http_client.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';

@@ -10,7 +10,8 @@ final globalContainer = ProviderContainer();
 void main() async {
   getIt.registerSingleton<HttpClient>(
       HttpClientImpl(baseUrl: 'https://api.tvmaze.com/'),
-      signalsReady: true);
+      signalsReady: true,
+      dispose: (instance) => instance.dispose());
 
   runApp(UncontrolledProviderScope(
       container: globalContainer, child: const MyApp()));

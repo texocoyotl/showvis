@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
+import 'package:showvis/core/models.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 
 class ShowsCatalogViewModel extends ViewModel {
