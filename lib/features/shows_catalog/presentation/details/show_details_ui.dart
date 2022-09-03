@@ -28,6 +28,8 @@ class ShowDetailsUI extends UI<ShowDetailsViewModel> {
                 imagePath: viewModel.largeImageUri,
                 ratingsIcon: ShowRatingWidget(rating: viewModel.rating),
                 onTabChange: viewModel.onTabChange,
+                isFavorite: viewModel.isFavorite,
+                toggleFavorite: viewModel.toggleFavorite,
               )
             ];
           },

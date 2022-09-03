@@ -8,6 +8,8 @@ class AppBarWidget extends StatelessWidget {
   final bool centerTitle;
   final Widget ratingsIcon;
   final Function(int) onTabChange;
+  final bool isFavorite;
+  final Function() toggleFavorite;
 
   const AppBarWidget({
     super.key,
@@ -16,6 +18,8 @@ class AppBarWidget extends StatelessWidget {
     required this.ratingsIcon,
     this.centerTitle = false,
     required this.onTabChange,
+    required this.isFavorite,
+    required this.toggleFavorite,
   });
 
   @override
@@ -33,6 +37,13 @@ class AppBarWidget extends StatelessWidget {
       pinned: true,
       elevation: 0,
       actions: [
+        IconButton(
+          icon: isFavorite
+              ? const Icon(Icons.favorite)
+              : const Icon(Icons.favorite_outline),
+          tooltip: isFavorite ? 'Unmark as Favorite' : 'Mark as Favorite',
+          onPressed: toggleFavorite,
+        ),
         ratingsIcon,
       ],
       bottom: TabBar(

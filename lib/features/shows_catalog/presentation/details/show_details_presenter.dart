@@ -41,6 +41,8 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
       onTabChange: (index) {
         if (index == 1) useCase.fetchEpisodes(id);
       },
+      isFavorite: entity.favoriteShows.containsKey(id),
+      toggleFavorite: () => useCase.toggleFavorite(show.id),
     );
   }
 }

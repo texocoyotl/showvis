@@ -14,7 +14,9 @@ class ShowDetailsViewModel extends ViewModel {
     required this.summary,
     required this.rating,
     required this.episodes,
+    required this.isFavorite,
     required this.onTabChange,
+    required this.toggleFavorite,
   });
 
   final String name;
@@ -26,10 +28,11 @@ class ShowDetailsViewModel extends ViewModel {
   final String daysSchedule;
   final String summary;
   final String rating;
-
+  final bool isFavorite;
   final StatefulMap episodes;
 
   final ValueChanged<int> onTabChange;
+  final VoidCallback toggleFavorite;
 
   @override
   List<Object?> get props => [
@@ -42,6 +45,7 @@ class ShowDetailsViewModel extends ViewModel {
         daysSchedule,
         summary,
         rating,
+        isFavorite,
         episodes,
       ];
 }

@@ -8,44 +8,50 @@ class ShowsCatalogEntity extends Entity {
     StatefulMap<int, Show>? showsInView,
     this.fromSearch = false,
     StatefulMap<int, Map<int, Episode>>? episodes,
+    this.favoriteShows = const {},
   })  : showsInView = showsInView ?? StatefulMap<int, Show>(),
         episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
   final StatefulMap<int, Show> showsInView;
   final bool fromSearch;
   final StatefulMap<int, Map<int, Episode>> episodes;
+  final Map<int, Show> favoriteShows;
 
-  ShowsCatalogEntity merge(
-          {Map<int, Show>? shows,
-          bool? fromSearch,
-          EntityState? state,
-          StatefulMap<int, Show>? showsInView,
-          StatefulMap<int, Map<int, Episode>>? episodes}) =>
+  ShowsCatalogEntity merge({
+    Map<int, Show>? shows,
+    bool? fromSearch,
+    EntityState? state,
+    StatefulMap<int, Show>? showsInView,
+    StatefulMap<int, Map<int, Episode>>? episodes,
+    Map<int, Show>? favoriteShows,
+  }) =>
       ShowsCatalogEntity(
         showsInView: showsInView ?? this.showsInView,
         fromSearch: fromSearch ?? this.fromSearch,
         episodes: episodes ?? this.episodes,
+        favoriteShows: favoriteShows ?? this.favoriteShows,
       );
 
   @override
-  List<Object?> get props => [showsInView, fromSearch, episodes];
+  List<Object?> get props => [showsInView, fromSearch, episodes, favoriteShows];
 }
 
 enum EntityState { initial, loading, networkError, completed }
 
 class Show extends Equatable {
-  const Show(
-      {required this.id,
-      required this.name,
-      required this.smallImageUri,
-      required this.largeImageUri,
-      required this.genres,
-      required this.premiered,
-      required this.ended,
-      required this.timeSchedule,
-      required this.daysSchedule,
-      required this.summary,
-      required this.rating});
+  const Show({
+    required this.id,
+    required this.name,
+    required this.smallImageUri,
+    required this.largeImageUri,
+    required this.genres,
+    required this.premiered,
+    required this.ended,
+    required this.timeSchedule,
+    required this.daysSchedule,
+    required this.summary,
+    required this.rating,
+  });
 
   factory Show.fromJson(Map<String, dynamic> json) => Show(
         id: json['id'] ?? 0,

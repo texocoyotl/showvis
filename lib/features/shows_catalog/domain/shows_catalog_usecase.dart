@@ -135,6 +135,17 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
       state: CollectionState.populated,
     ));
   }
+
+  Future<void> toggleFavorite(int showId) async {
+    if (entity.favoriteShows.containsKey(showId)) {
+      entity = entity.merge(
+          favoriteShows: Map.from(entity.favoriteShows)..remove(showId));
+    } else {
+      entity = entity.merge(
+          favoriteShows: Map.from(entity.favoriteShows)
+            ..addAll({showId: _shows[showId]!}));
+    }
+  }
 }
 
 final showsCatalogUseCase =
