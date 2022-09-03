@@ -3,66 +3,28 @@ import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 
 class ShowsCatalogViewModel extends ViewModel {
-  const ShowsCatalogViewModel({
-    required this.fromSearch,
-  });
-
-  final bool fromSearch;
-  @override
-  List<Object?> get props => [];
-}
-
-class ShowsCatalogLoadingViewModel extends ShowsCatalogViewModel {
-  const ShowsCatalogLoadingViewModel({required super.fromSearch});
-}
-
-class ShowsCatalogWithContentViewModel extends ShowsCatalogViewModel {
-  const ShowsCatalogWithContentViewModel(
-      {required super.fromSearch, required this.refresh});
-
-  final VoidCallback refresh;
-}
-
-class ShowsCatalogNetworkFailureViewModel
-    extends ShowsCatalogWithContentViewModel {
-  const ShowsCatalogNetworkFailureViewModel(
-      {required this.retry, required super.fromSearch, required super.refresh});
-
-  final ValueChanged<String> retry;
-}
-
-class ShowsCatalogSuccessViewModel extends ShowsCatalogWithContentViewModel {
-  const ShowsCatalogSuccessViewModel(
+  const ShowsCatalogViewModel(
       {required this.shows,
-      required super.fromSearch,
-      required super.refresh,
+      required this.fromSearch,
+      required this.isLoading,
+      required this.hasError,
+      required this.refresh,
       required this.openDetails,
       required this.search,
-      required this.goToPreviousPage,
-      required this.goToNextPage});
+      required this.goToNextPage,
+      required this.retry});
 
   final List<Show> shows;
+  final bool fromSearch;
+  final bool isLoading;
+  final bool hasError;
 
   final ValueChanged<int> openDetails;
   final ValueChanged<String> search;
-  final VoidCallback goToPreviousPage;
   final VoidCallback goToNextPage;
 
+  final ValueChanged<String> retry;
+  final VoidCallback refresh;
   @override
-  List<Object?> get props => [shows, fromSearch];
+  List<Object?> get props => [shows, fromSearch, isLoading, hasError];
 }
-
-// class ShowsCatalogSearchSuccessViewModel extends ShowsCatalogViewModel {
-//   const ShowsCatalogSearchSuccessViewModel({
-//     required this.shows,
-//     required this.searchText,
-//     required this.openDetails,
-//   });
-
-//   final List<Show> shows;
-//   final String searchText;
-//   final ValueChanged<int> openDetails;
-
-//   @override
-//   List<Object?> get props => [shows, searchText];
-// }
