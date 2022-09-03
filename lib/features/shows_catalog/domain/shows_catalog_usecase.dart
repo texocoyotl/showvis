@@ -145,9 +145,14 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
       entity = entity.merge(
           favoriteShows: Map.from(entity.favoriteShows)..remove(showId));
     } else {
+      final show = entity.showsInView.map.containsKey(showId)
+          ? entity.showsInView.map[showId]
+          : _shows[showId];
+      if (show == null) return;
+
       entity = entity.merge(
           favoriteShows: Map.from(entity.favoriteShows)
-            ..addAll({showId: _shows[showId]!}));
+            ..addAll({showId: show}));
     }
     getIt<FavoritesPersistance>().persistFavoriteShows(entity.favoriteShows);
   }

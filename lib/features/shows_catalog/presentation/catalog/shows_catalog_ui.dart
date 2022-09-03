@@ -18,6 +18,8 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   Widget build(BuildContext context, ShowsCatalogViewModel viewModel) {
     final isSearchMode = ValueNotifier<bool>((viewModel.fromSearch));
     return WillPopScope(
+      // On Android devices, the app bar won't detect the back button event
+      // when the search is active, so it has to be consumed by this widget
       onWillPop: () async {
         if (searchText.value != '') {
           isSearchMode.value = false;
@@ -28,30 +30,32 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBarWithSearchSwitch(
-          customIsSearchModeNotifier: isSearchMode,
-          customTextNotifier: searchText,
-          closeOnSubmit: false,
-          clearOnSubmit: false,
-          clearOnClose: true,
-          onSubmitted: viewModel.search,
-          onClosed: viewModel.refresh,
-          appBarBuilder: (context) {
-            return AppBar(
-              title: const Text('All Shows'),
-              actions: const [
-                AppBarSearchButton(
-                  buttonHasTwoStates: false,
-                ),
-              ],
-            );
-          },
-        ),
-        //drawer: const MainDrawer(),
+        appBar: _appBar(viewModel, searchText, isSearchMode),
         body: _body(context, viewModel),
       ),
     );
   }
+
+  _appBar(ShowsCatalogViewModel viewModel, searchText, isSearchMode) =>
+      AppBarWithSearchSwitch(
+        customIsSearchModeNotifier: isSearchMode,
+        customTextNotifier: searchText,
+        closeOnSubmit: false,
+        clearOnSubmit: false,
+        clearOnClose: true,
+        onSubmitted: viewModel.search,
+        onClosed: viewModel.refresh,
+        appBarBuilder: (context) {
+          return AppBar(
+            title: const Text('All Shows'),
+            actions: const [
+              AppBarSearchButton(
+                buttonHasTwoStates: false,
+              ),
+            ],
+          );
+        },
+      );
 
   Widget _body(
     BuildContext context,
@@ -64,7 +68,8 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
       onFetchData: !viewModel.fromSearch ? viewModel.goToNextPage : () {},
       separatorBuilder: (context) => const Divider(),
       itemBuilder: (context, index) {
-        return _showRow(viewModel.shows[index], viewModel.openDetails);
+        return ShowTileWidget(
+            show: viewModel.shows[index], onTap: viewModel.openDetails);
       },
       errorBuilder: (context) {
         return Column(
@@ -79,34 +84,40 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
     );
   }
 
-  Widget _showRow(
-    Show show,
-    ValueChanged<int> openDetails,
-  ) =>
-      ListTile(
-        leading: Hero(
-          tag: show.name,
-          child: show.largeImageUri.isEmpty
-              ? const Image(image: AssetImage('assets/no_image.png'))
-              : CachedNetworkImage(
-                  imageUrl: show.largeImageUri,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      const CupertinoActivityIndicator(
-                    radius: 10,
-                    //value: downloadProgress.progress,
-                    color: Colors.black87,
-                  ),
-                  height: 150,
-                ),
-        ),
-        title: Text(show.name),
-        trailing: ShowRatingWidget(rating: show.rating.toString()),
-        onTap: () => openDetails(show.id),
-      );
-
   @override
   Presenter create(PresenterBuilder<ShowsCatalogViewModel> builder) =>
       ShowsCatalogPresenter(builder: builder);
+}
+
+class ShowTileWidget extends StatelessWidget {
+  const ShowTileWidget({super.key, required this.show, required this.onTap});
+
+  final Show show;
+  final Function(int) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Hero(
+        tag: show.name,
+        child: show.largeImageUri.isEmpty
+            ? const Image(image: AssetImage('assets/no_image.png'))
+            : CachedNetworkImage(
+                imageUrl: show.largeImageUri,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    const CupertinoActivityIndicator(
+                  radius: 10,
+                  //value: downloadProgress.progress,
+                  color: Colors.black87,
+                ),
+                height: 150,
+              ),
+      ),
+      title: Text(show.name),
+      trailing: ShowRatingWidget(rating: show.rating.toString()),
+      onTap: () => onTap(show.id),
+    );
+  }
 }
 
 class ShowRatingWidget extends StatelessWidget {
