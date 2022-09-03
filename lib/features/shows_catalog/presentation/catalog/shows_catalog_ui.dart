@@ -98,19 +98,33 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
                 ),
         ),
         title: Text(show.name),
-        trailing: SizedBox(
-          height: 64,
-          width: 64,
-          child: Stack(alignment: Alignment.center, children: [
-            const Center(
-                child: Icon(Icons.star, color: Colors.yellow, size: 54)),
-            Center(child: Text(show.rating.toString()))
-          ]),
-        ),
+        trailing: ShowRatingWidget(rating: show.rating.toString()),
         onTap: () => openDetails(show.id),
       );
 
   @override
   Presenter create(PresenterBuilder<ShowsCatalogViewModel> builder) =>
       ShowsCatalogPresenter(builder: builder);
+}
+
+class ShowRatingWidget extends StatelessWidget {
+  const ShowRatingWidget({super.key, required this.rating});
+
+  final String rating;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 64,
+      width: 64,
+      child: Stack(alignment: Alignment.center, children: [
+        const Center(child: Icon(Icons.star, color: Colors.yellow, size: 54)),
+        Center(
+            child: Text(
+          rating,
+          style: const TextStyle(color: Colors.black),
+        ))
+      ]),
+    );
+  }
 }
