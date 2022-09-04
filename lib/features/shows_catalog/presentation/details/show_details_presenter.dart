@@ -1,4 +1,5 @@
 import 'package:showvis/core/architecture_components.dart';
+import 'package:showvis/core/models.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_usecase.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_view_model.dart';
@@ -22,7 +23,7 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
   @override
   ShowDetailsViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    final show = entity.showsInView.map[id]!;
+    Show show = entity.showsInView.map[id] ?? entity.showsFromPeopleSearch[id]!;
 
     return ShowDetailsViewModel(
       name: show.name,

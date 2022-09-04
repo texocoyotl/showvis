@@ -6,14 +6,12 @@ class PeopleAppBarWidget extends StatelessWidget {
   final String text;
   final String imagePath;
   final bool centerTitle;
-  final Widget ratingsIcon;
   final Function(int) onTabChange;
 
   const PeopleAppBarWidget({
     super.key,
     required this.text,
     required this.imagePath,
-    required this.ratingsIcon,
     this.centerTitle = false,
     required this.onTabChange,
   });
@@ -51,7 +49,7 @@ class PeopleAppBarWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 76.0, bottom: 48),
             child: Hero(
-              tag: text,
+              tag: 'people/$text',
               child: imagePath.isEmpty
                   ? const Image(image: AssetImage('assets/no_image.png'))
                   : CachedNetworkImage(

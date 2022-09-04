@@ -3,12 +3,17 @@ import 'package:showvis/core/models.dart';
 import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/dependencies/favorites_persistance.dart';
 import 'package:showvis/dependencies/http_client.dart';
+import 'package:showvis/features/people/domain/people_entity.dart';
+import 'package:showvis/features/people/domain/people_usecase.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/main.dart';
 
 class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
   ShowsCatalogUseCase() : super(entity: ShowsCatalogEntity()) {
     _loadFavoriteShows();
+
+    final peopleRef = peopleUseCase.getUseCaseFromContext(globalContainer);
+    peopleRef.addListener(_peopleUseCaseListener);
   }
 
   static int showsPerView = 250; //TODO Change to a shared preferences value
@@ -145,9 +150,11 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
       entity = entity.merge(
           favoriteShows: Map.from(entity.favoriteShows)..remove(showId));
     } else {
-      final show = entity.showsInView.map.containsKey(showId)
-          ? entity.showsInView.map[showId]
-          : _shows[showId];
+      final show = entity.showsFromPeopleSearch.containsKey(showId)
+          ? entity.showsFromPeopleSearch[showId]
+          : entity.showsInView.map.containsKey(showId)
+              ? entity.showsInView.map[showId]
+              : _shows[showId];
       if (show == null) return;
 
       entity = entity.merge(
@@ -161,6 +168,10 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
     final favoriteShows =
         await getIt<FavoritesPersistance>().retrieveFavoriteShows();
     entity = entity.merge(favoriteShows: favoriteShows);
+  }
+
+  void _peopleUseCaseListener(PeopleEntity peopleEntity) {
+    entity = entity.merge(showsFromPeopleSearch: peopleEntity.shows.map);
   }
 }
 

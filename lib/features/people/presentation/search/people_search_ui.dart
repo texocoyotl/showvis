@@ -104,7 +104,7 @@ class PersonTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Hero(
-        tag: person.name,
+        tag: 'people/${person.name}',
         child: person.imageUri.isEmpty
             ? const Image(image: AssetImage('assets/no_image.png'))
             : CachedNetworkImage(

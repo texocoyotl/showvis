@@ -3,6 +3,7 @@ import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/features/people/domain/people_entity.dart';
 import 'package:showvis/features/people/domain/people_usecase.dart';
 import 'package:showvis/features/people/presentation/search/people_search_view_model.dart';
+import 'package:showvis/router.dart';
 
 class PeopleSearchPresenter
     extends Presenter<PeopleUseCase, PeopleEntity, PeopleSearchViewModel> {
@@ -18,7 +19,9 @@ class PeopleSearchPresenter
           list: entity.people.map.values.toList(), state: entity.people.state),
       search: useCase.searchPeople,
       cancelSearch: useCase.cancelSearch,
-      openDetails: (_) {},
+      openDetails: (id) {
+        router.push('/people/$id');
+      },
     );
   }
 }
