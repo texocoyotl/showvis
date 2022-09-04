@@ -1,9 +1,20 @@
-# showvis
+# ShowVis
+## by Benjamin Molina
 
 Search and share all your favorite TV Shows
 
-TBD
+This is a challenge project completed in 5 days, 
 
+# Challenge Goals
+
+
+
+# Architecture Approach
+
+For this app, I used an architecture based on the guidelines proposed by Robert Martin about (Clean Architecture)
+
+Please refer to this diagram
+![Clean Architecture](https://drive.google.com/file/d/1ZrO-uazwApIIbeAPaQ5a1-thpsPxjcYn/view?usp=sharing)
 # Improvements Roadmap
 
 - Replace print calls with a logging system.
