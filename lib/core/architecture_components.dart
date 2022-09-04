@@ -14,6 +14,7 @@ abstract class Entity extends Equatable {
 abstract class UseCase<E extends Entity> extends StateNotifier<E> {
   UseCase({required E entity}) : super(entity);
 
+  @visibleForTesting
   @protected
   E get entity => super.state;
 

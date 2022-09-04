@@ -26,11 +26,13 @@ dependencies:
   splash_screen_view: ^3.0.0
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
+  mocktail: ^0.3.0
 
 flutter:
   uses-material-design: true

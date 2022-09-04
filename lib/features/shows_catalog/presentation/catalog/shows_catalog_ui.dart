@@ -107,6 +107,7 @@ class ShowTileWidget extends StatelessWidget {
         child: show.largeImageUri.isEmpty
             ? const Image(image: AssetImage('assets/no_image.png'))
             : CachedNetworkImage(
+                key: Key('showImage${show.id}'),
                 imageUrl: show.largeImageUri,
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
                     const CupertinoActivityIndicator(

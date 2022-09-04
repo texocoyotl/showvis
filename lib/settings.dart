@@ -13,14 +13,18 @@ class Settings extends StatelessWidget {
             leading: const Icon(Icons.info),
             title: const Text('About'),
             onTap: () => showAboutDialog(
-              context: context,
-              applicationName: 'ShowVis',
-              applicationVersion: '1.0.0',
-              applicationIcon: Image.asset(
-                'assets/logo.png',
-                height: 250,
-              ),
-            ),
+                context: context,
+                applicationName: 'ShowVis',
+                applicationVersion: '1.0.0',
+                applicationIcon: Image.asset(
+                  'assets/logo.png',
+                  height: 80,
+                ),
+                children: [
+                  const Center(
+                    child: Text('by Benjamin Molina'),
+                  )
+                ]),
           ),
         ),
       ]),

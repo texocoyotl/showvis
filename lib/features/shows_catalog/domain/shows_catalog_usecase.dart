@@ -53,8 +53,6 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
         showsInView: StatefulMap<int, Show>(
             map: Map.from(entity.showsInView.map)..addAll(showsPerPage),
             state: CollectionState.populated));
-
-    print(entity.showsInView.map.length);
   }
 
   Future<bool> _fetchShowsCatalogIfNeeded(int initialShowID) async {

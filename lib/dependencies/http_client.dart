@@ -40,16 +40,18 @@ class HttpClientImpl implements HttpClient {
   }
 }
 
-abstract class JsonResponse {}
+abstract class JsonResponse {
+  const JsonResponse();
+}
 
 class JsonSuccessResponse extends JsonResponse {
-  JsonSuccessResponse(this.content);
+  const JsonSuccessResponse(this.content);
 
   final dynamic content;
 }
 
 class JsonFailureResponse extends JsonResponse {
-  JsonFailureResponse({this.reason = FailureReason.unknown});
+  const JsonFailureResponse({this.reason = FailureReason.unknown});
   final FailureReason reason;
 
   JsonFailureResponse.fromStatusCode(int code) : reason = _mapReason(code);
