@@ -45,8 +45,8 @@ class Show extends Equatable {
         largeImageUri:
             (json['image'] == null) ? '' : json['image']['original'] ?? '',
         genres: [for (String genre in json['genres'] ?? const []) genre],
-        premiered: DateTime.parse(json['premiered'] ?? '2099-01-01'),
-        ended: DateTime.parse(json['ended'] ?? '2099-01-01'),
+        premiered: DateTime.parse(json['premiered'] ?? '2999-01-01'),
+        ended: DateTime.parse(json['ended'] ?? '2999-01-01'),
         timeSchedule: json['schedule']['time'] ?? '',
         daysSchedule: [
           for (String day in json['schedule']['days'] ?? const []) day
@@ -113,10 +113,54 @@ class Episode extends Equatable {
         imageUrl:
             (json['image'] == null) ? '' : json['image']['original'] ?? '',
         airDate: DateTime.parse(
-            '${json['airdate'] ?? '2099-01-01'} ${json['airtime'] ?? '00:00'}'),
+            '${json['airdate'] ?? '2999-01-01'} ${json['airtime'] ?? '00:00'}'),
       );
 
   @override
   List<Object?> get props =>
       [id, name, season, number, summary, imageUrl, airDate];
+}
+
+class Person extends Equatable {
+  const Person({
+    required this.id,
+    required this.name,
+    required this.gender,
+    required this.birthday,
+    required this.country,
+    required this.countryCode,
+    required this.imageUri,
+  });
+
+  factory Person.fromJson(Map<String, dynamic> json) => Person(
+        id: json['id'],
+        name: json['name'] ?? '',
+        gender: json['gender'] ?? '',
+        birthday: DateTime.parse(json['birthday'] ?? '2999-01-01'),
+        country:
+            (json['country'] == null) ? '' : json['country']!['name'] ?? '',
+        countryCode:
+            (json['country'] == null) ? '' : json['country']!['name'] ?? '',
+        imageUri:
+            (json['image'] == null) ? '' : json['image']['original'] ?? '',
+      );
+
+  final int id;
+  final String name;
+  final String gender;
+  final DateTime birthday;
+  final String country;
+  final String countryCode;
+  final String imageUri;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        gender,
+        birthday,
+        country,
+        countryCode,
+        imageUri,
+      ];
 }

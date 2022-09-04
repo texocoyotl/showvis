@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:showvis/features/favorites_list/presentation/favorites_list_ui.dart';
+import 'package:showvis/features/people/presentation/search/people_search_ui.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_ui.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _mainContents = [
     ShowsCatalogUI(),
     FavoritesListUI(),
+    PeopleSearchUI(),
     Container(
       color: Colors.pink.shade300,
       alignment: Alignment.center,
@@ -43,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icon(Icons.tv), label: 'All Shows'),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.favorite), label: 'Favorites'),
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.person), label: 'People'),
                   BottomNavigationBarItem(
                       icon: Icon(Icons.settings), label: 'Settings')
                 ])

@@ -30,7 +30,7 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
       genres: show.genres.join(' | '),
       premiered:
           '${DateFormat.MMM().format(show.premiered)} ${DateFormat.y().format(show.premiered)}',
-      ended: show.ended == DateTime.parse('2099-01-01')
+      ended: show.ended == DateTime.parse('2999-01-01')
           ? 'Not ended yet'
           : '${DateFormat.MMM().format(show.ended)} ${DateFormat.y().format(show.ended)}',
       timeSchedule: show.timeSchedule,

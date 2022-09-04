@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AppBarWidget extends StatelessWidget {
+class ShowsAppBarWidget extends StatelessWidget {
   final String text;
   final String imagePath;
   final bool centerTitle;
@@ -11,7 +11,7 @@ class AppBarWidget extends StatelessWidget {
   final bool isFavorite;
   final Function() toggleFavorite;
 
-  const AppBarWidget({
+  const ShowsAppBarWidget({
     super.key,
     required this.text,
     required this.imagePath,

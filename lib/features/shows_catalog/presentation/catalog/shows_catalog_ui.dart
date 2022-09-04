@@ -75,7 +75,7 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
         return Column(
           children: [
             const Text(
-                'The list cannot be retrieved at this moment, please check you have Internet connection.'),
+                'The list cannot be retrieved at this moment, please check that you have Internet connection.'),
             ElevatedButton(
                 onPressed: viewModel.refresh, child: const Text('Retry')),
           ],

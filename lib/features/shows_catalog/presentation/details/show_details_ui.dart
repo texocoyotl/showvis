@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:showvis/core/architecture_components.dart';
 import 'package:showvis/core/models.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_ui.dart';
-import 'package:showvis/features/shows_catalog/presentation/details/sliver_app_bar.dart';
+import 'package:showvis/features/shows_catalog/presentation/details/shows_app_bar_widget.dart';
 import 'package:showvis/core/stateful_collections.dart';
 import 'package:showvis/features/shows_catalog/domain/shows_catalog_entity.dart';
 import 'package:showvis/features/shows_catalog/presentation/details/show_details_presenter.dart';
@@ -24,7 +24,7 @@ class ShowDetailsUI extends UI<ShowDetailsViewModel> {
         child: NestedScrollView(
           headerSliverBuilder: (context, value) {
             return [
-              AppBarWidget(
+              ShowsAppBarWidget(
                 text: viewModel.name,
                 imagePath: viewModel.largeImageUri,
                 ratingsIcon: ShowRatingWidget(rating: viewModel.rating),
