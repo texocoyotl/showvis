@@ -12,10 +12,10 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});
 
-  final searchText = ValueNotifier<String>('');
-
   @override
   Widget build(BuildContext context, ShowsCatalogViewModel viewModel) {
+    final searchText = ValueNotifier<String>('');
+
     final isSearchMode = ValueNotifier<bool>((viewModel.fromSearch));
     return WillPopScope(
       // On Android devices, the app bar won't detect the back button event

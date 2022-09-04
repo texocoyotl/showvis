@@ -11,10 +11,9 @@ import 'package:showvis/features/people/presentation/search/people_search_view_m
 class PeopleSearchUI extends UI<PeopleSearchViewModel> {
   PeopleSearchUI({super.key});
 
-  final searchText = ValueNotifier<String>('');
-
   @override
   Widget build(BuildContext context, PeopleSearchViewModel viewModel) {
+    final searchText = ValueNotifier<String>('');
     final isSearchMode = ValueNotifier<bool>(true);
 
     Widget content = Container();

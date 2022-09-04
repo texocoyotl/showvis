@@ -26,7 +26,19 @@ class MyApp extends StatelessWidget {
       routerDelegate: router.routerDelegate,
       theme: ThemeData.light().copyWith(
         colorScheme: const ColorScheme.light().copyWith(
-          primary: Colors.deepPurple,
+          primary: const Color(0xFF673AB7),
+        ),
+        indicatorColor: Colors.white,
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyLarge: ThemeData.light().textTheme.bodyLarge!.copyWith(
+                    //fontWeight: FontWeight.bold,
+                    height: 1.5,
+                  ),
+            ),
+      ),
+      darkTheme: ThemeData.light().copyWith(
+        colorScheme: const ColorScheme.light().copyWith(
+          primary: const Color(0xFF673AB7),
         ),
         indicatorColor: Colors.white,
         textTheme: ThemeData.light().textTheme.copyWith(
