@@ -12,6 +12,8 @@ import 'package:very_good_infinite_list/very_good_infinite_list.dart';
 class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
   ShowsCatalogUI({super.key});
 
+  final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context, ShowsCatalogViewModel viewModel) {
     final searchText = ValueNotifier<String>('');
@@ -38,11 +40,13 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
 
   _appBar(ShowsCatalogViewModel viewModel, searchText, isSearchMode) =>
       AppBarWithSearchSwitch(
+        customTextEditingController: _controller,
         customIsSearchModeNotifier: isSearchMode,
         customTextNotifier: searchText,
         closeOnSubmit: false,
         clearOnSubmit: false,
         clearOnClose: true,
+        onChanged: (text) => print('Search for $text'),
         onSubmitted: viewModel.search,
         onClosed: viewModel.refresh,
         appBarBuilder: (context) {

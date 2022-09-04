@@ -31,19 +31,21 @@ class MyApp extends StatelessWidget {
         indicatorColor: Colors.white,
         textTheme: ThemeData.light().textTheme.copyWith(
               bodyLarge: ThemeData.light().textTheme.bodyLarge!.copyWith(
-                    //fontWeight: FontWeight.bold,
                     height: 1.5,
                   ),
             ),
       ),
-      darkTheme: ThemeData.light().copyWith(
-        colorScheme: const ColorScheme.light().copyWith(
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: const ColorScheme.dark().copyWith(
           primary: const Color(0xFF673AB7),
+          primaryContainer: const Color(0xFF673AB7),
         ),
+        appBarTheme: ThemeData.dark().appBarTheme.copyWith(
+              backgroundColor: const Color(0xFF673AB7),
+            ),
         indicatorColor: Colors.white,
-        textTheme: ThemeData.light().textTheme.copyWith(
-              bodyLarge: ThemeData.light().textTheme.bodyLarge!.copyWith(
-                    //fontWeight: FontWeight.bold,
+        textTheme: ThemeData.dark().textTheme.copyWith(
+              bodyLarge: ThemeData.dark().textTheme.bodyLarge!.copyWith(
                     height: 1.5,
                   ),
             ),
