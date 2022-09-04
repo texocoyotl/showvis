@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:showvis/features/favorites_list/presentation/favorites_list_ui.dart';
 import 'package:showvis/features/people/presentation/search/people_search_ui.dart';
 import 'package:showvis/features/shows_catalog/presentation/catalog/shows_catalog_ui.dart';
+import 'package:showvis/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,14 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ShowsCatalogUI(),
     FavoritesListUI(),
     PeopleSearchUI(),
-    Container(
-      color: Colors.pink.shade300,
-      alignment: Alignment.center,
-      child: const Text(
-        'Settings',
-        style: TextStyle(fontSize: 40),
-      ),
-    )
+    const Settings(),
   ];
 
   int _selectedIndex = 0;

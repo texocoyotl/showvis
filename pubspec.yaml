@@ -37,6 +37,7 @@ flutter:
 
   assets:
     - assets/no_image.png
+    - assets/logo.png
 
 splash_screen_view:
   # Use color to set the background of your splash screen to a solid color.
