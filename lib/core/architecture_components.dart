@@ -3,6 +3,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// The holder of the state of the features.
+///
+/// Each Use Case uses an Entity to add any data that needs to be propagated
+/// to the outer layer.
+///
+/// Under this simple Clean approach, every Presenter reads the updates from
+/// Entities and translate the data into a more digestable View Model.
 @immutable
 abstract class Entity extends Equatable {
   const Entity();
@@ -11,6 +18,18 @@ abstract class Entity extends Equatable {
   bool get stringify => true;
 }
 
+/// Holds any business logic that modifies the state in the Entities, and links
+/// any dependency behavior that creates inputs and ouputs of data.
+///
+/// It extends from State Notifier, so each time
+/// something changes in the Entity that causes a difference in the props defined
+/// thanks to the Equatable props, all subscribers receive the new instance.
+///
+/// It can be possible that multiple screens and widgets communicate to the same
+/// Use Case, just have in consideration that this will require a Presenter / View
+/// Model pair for each UI component, because each view could define specific
+/// subsets of the Entity data, as well as specific callbacks caused by UI events
+/// and user interactions.
 abstract class UseCase<E extends Entity> extends StateNotifier<E> {
   UseCase({required E entity}) : super(entity);
 
@@ -22,6 +41,9 @@ abstract class UseCase<E extends Entity> extends StateNotifier<E> {
   set entity(newEntity) => super.state = newEntity;
 }
 
+/// Based on the Riverpod providers, this encapsulates most of the hard-to-understand
+/// setup code. This class will let the developers get the use case references
+/// with or without a context and listen to entity changes.
 class UseCaseProvider<E extends Entity, U extends UseCase<E>> {
   final StateNotifierProvider<U, E> _provider;
   final U Function(Ref) create;
@@ -53,11 +75,29 @@ class UseCaseProvider<E extends Entity, U extends UseCase<E>> {
 
 typedef ProviderListener<E extends Entity> = void Function(E entity);
 
+/// A View Model should be responsible to propagate only the data from the Entities
+/// that makes sense for the UI component attached to it. It also becomes the holder
+/// of any callback related to user interaction. This way, the is no need for UI clases
+/// to have a reference to the Use Case.
+///
+/// Try to have already formated data in this class. For example, date fields should
+/// already have been translated into a text version and be passed as Strings through
+/// this class.
 @immutable
 abstract class ViewModel extends Equatable {
   const ViewModel();
 }
 
+/// For each UI component that will interact with a specific View Model, a Presenter
+/// needs to exist as the middleman that "translates" the raw data from Entities.
+///
+/// The two helper methods [onLayoutReady] and [onUpdate] are optionally used
+/// if a flow of logic not only depends on simple updates from Entities.
+///
+/// [onLayourReady] will be called once the Presenter is inserted on the Widget tree,
+/// so it is used for calls that trigger some kind of setup on the Use Case.
+///
+/// [onUpdate] will matter when the updates do something tha requires a BuildContext.
 abstract class Presenter<U extends UseCase, E extends Entity,
     V extends ViewModel> extends ConsumerStatefulWidget {
   final UseCaseProvider _provider;
@@ -147,6 +187,11 @@ class _PresenterState<U extends UseCase, E extends Entity, V extends ViewModel>
 
 typedef PresenterBuilder<V extends ViewModel> = Widget Function(V viewModel);
 
+/// A widget class that is coupled with a View Model.
+///
+/// When using this class, avoid any code that either generates states (as with
+/// the basic Stateful Widgets code normally found in the web) or that has
+/// manipulation or format logic.
 abstract class UI<V extends ViewModel> extends StatefulWidget {
   late final PresenterCreator<V>? _create;
   UI({
