@@ -60,7 +60,7 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
 
     final page = (initialShowID / showsPerAPICall).floor();
 
-    print('Query for Shows on Page $page');
+    //print('Query for Shows on Page $page');
 
     final JsonResponse res =
         await getIt<HttpClient>().query(path: 'shows?page=$page');
@@ -81,7 +81,7 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
         showsInView: StatefulMap<int, Show>(
             map: const {}, state: CollectionState.loading));
 
-    print('Search for Shows with $text');
+    //print('Search for Shows with $text');
 
     final JsonResponse res =
         await getIt<HttpClient>().query(path: 'search/shows?q=$text');

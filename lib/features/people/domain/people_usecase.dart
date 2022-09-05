@@ -14,7 +14,7 @@ class PeopleUseCase extends UseCase<PeopleEntity> {
     entity = entity.merge(
         people: StatefulMap(map: const {}, state: CollectionState.loading));
 
-    print('Search for People with $text');
+    //print('Search for People with $text');
 
     final JsonResponse res =
         await getIt<HttpClient>().query(path: 'search/people?q=$text');

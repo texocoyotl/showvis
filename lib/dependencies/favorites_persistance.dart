@@ -47,7 +47,7 @@ class FavoritesPersistanceImpl implements FavoritesPersistance {
       final List<dynamic> json = jsonDecode(jsonString);
       shows.addAll({for (var show in json) show['id']: Show.fromJson(show)});
     } catch (e) {
-      print('No data has been retrieved.');
+      //print('No data has been retrieved.');
     }
     return shows;
   }

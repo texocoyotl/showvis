@@ -46,7 +46,6 @@ class ShowsCatalogUI extends UI<ShowsCatalogViewModel> {
         closeOnSubmit: false,
         clearOnSubmit: false,
         clearOnClose: true,
-        onChanged: (text) => print('Search for $text'),
         onSubmitted: viewModel.search,
         onClosed: viewModel.refresh,
         appBarBuilder: (context) {
