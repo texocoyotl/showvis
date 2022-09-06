@@ -23,7 +23,9 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
   @override
   ShowDetailsViewModel createViewModel(
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
-    Show show = entity.showsInView.map[id] ?? entity.showsFromPeopleSearch[id]!;
+    Show show = entity.showsInView.map[id] ??
+        entity.favoriteShows[id] ??
+        entity.showsFromPeopleSearch[id]!;
 
     return ShowDetailsViewModel(
       name: show.name,
