@@ -148,14 +148,15 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
       entity = entity.merge(
           favoriteShows: Map.from(entity.favoriteShows)..remove(showId));
     } else {
-      final show = entity.showsFromPeopleSearch.containsKey(showId)
-          ? entity.showsFromPeopleSearch[showId]
+      final show = entity.showsHistory.containsKey(showId)
+          ? entity.showsHistory[showId]
           : entity.showsInView.map.containsKey(showId)
               ? entity.showsInView.map[showId]
               : _shows[showId];
       if (show == null) return;
 
       entity = entity.merge(
+          showsHistory: Map.from(entity.showsHistory)..addAll({show.id: show}),
           favoriteShows: Map.from(entity.favoriteShows)
             ..addAll({showId: show}));
     }
@@ -165,11 +166,14 @@ class ShowsCatalogUseCase extends UseCase<ShowsCatalogEntity> {
   Future<void> _loadFavoriteShows() async {
     final favoriteShows =
         await getIt<FavoritesPersistance>().retrieveFavoriteShows();
-    entity = entity.merge(favoriteShows: favoriteShows);
+    entity =
+        entity.merge(favoriteShows: favoriteShows, showsHistory: favoriteShows);
   }
 
   void _peopleUseCaseListener(PeopleEntity peopleEntity) {
-    entity = entity.merge(showsFromPeopleSearch: peopleEntity.shows.map);
+    entity = entity.merge(
+        showsHistory: Map.from(entity.showsHistory)
+          ..addAll(peopleEntity.shows.map));
   }
 }
 

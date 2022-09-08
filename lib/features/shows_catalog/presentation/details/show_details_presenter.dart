@@ -25,7 +25,7 @@ class ShowDetailsPresenter extends Presenter<ShowsCatalogUseCase,
       ShowsCatalogUseCase useCase, ShowsCatalogEntity entity) {
     Show show = entity.showsInView.map[id] ??
         entity.favoriteShows[id] ??
-        entity.showsFromPeopleSearch[id]!;
+        entity.showsHistory[id]!;
 
     return ShowDetailsViewModel(
       name: show.name,

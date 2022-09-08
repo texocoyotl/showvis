@@ -8,7 +8,7 @@ class ShowsCatalogEntity extends Entity {
     this.fromSearch = false,
     StatefulMap<int, Map<int, Episode>>? episodes,
     this.favoriteShows = const {},
-    this.showsFromPeopleSearch = const {},
+    this.showsHistory = const {},
   })  : showsInView = showsInView ?? StatefulMap<int, Show>(),
         episodes = episodes ?? StatefulMap<int, Map<int, Episode>>();
 
@@ -16,7 +16,7 @@ class ShowsCatalogEntity extends Entity {
   final bool fromSearch;
   final StatefulMap<int, Map<int, Episode>> episodes;
   final Map<int, Show> favoriteShows;
-  final Map<int, Show> showsFromPeopleSearch;
+  final Map<int, Show> showsHistory;
 
   ShowsCatalogEntity merge({
     Map<int, Show>? shows,
@@ -24,18 +24,17 @@ class ShowsCatalogEntity extends Entity {
     StatefulMap<int, Show>? showsInView,
     StatefulMap<int, Map<int, Episode>>? episodes,
     Map<int, Show>? favoriteShows,
-    Map<int, Show>? showsFromPeopleSearch,
+    Map<int, Show>? showsHistory,
   }) =>
       ShowsCatalogEntity(
         showsInView: showsInView ?? this.showsInView,
         fromSearch: fromSearch ?? this.fromSearch,
         episodes: episodes ?? this.episodes,
         favoriteShows: favoriteShows ?? this.favoriteShows,
-        showsFromPeopleSearch:
-            showsFromPeopleSearch ?? this.showsFromPeopleSearch,
+        showsHistory: showsHistory ?? this.showsHistory,
       );
 
   @override
   List<Object?> get props =>
-      [showsInView, fromSearch, episodes, favoriteShows, showsFromPeopleSearch];
+      [showsInView, fromSearch, episodes, favoriteShows, showsHistory];
 }
